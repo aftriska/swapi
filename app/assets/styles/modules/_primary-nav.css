@@ -1,0 +1,41 @@
+.primary-nav {
+  margin-bottom: 10px;
+
+  ul {
+    margin: 0;
+    padding: 0;
+
+    @mixin clearfix;
+  }
+
+  li {
+    list-style: none;
+    display: block;
+    float: left;
+    padding-right: 5px;
+  }
+
+  li:last-child {
+    padding-right: 0;
+  }
+
+  /*a {
+    color: #fff;
+    font-weight: 300;
+    text-decoration: none;
+    display: block;
+    padding: 5px 10px;
+    font-size: 1.2rem;
+    background-color: navy;
+  }*/
+
+  button {
+    color: #fff;
+    font-weight: 300;
+    border: none;
+    display: block;
+    padding: 5px 10px;
+    font-size: 1.2rem;
+    background-color: navy;
+  }
+}

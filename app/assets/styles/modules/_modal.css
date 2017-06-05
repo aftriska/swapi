@@ -1,0 +1,22 @@
+.modal {
+  position: absolute;
+  opacity: 0;
+  margin: auto;
+  padding: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border: 1px solid blue;
+  background-color: #ff6;
+  visibility: hidden;
+  transform: scale(1.2);
+  transition: all .3s ease-out;
+  overflow: scroll;
+
+  &--is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+  }
+}
