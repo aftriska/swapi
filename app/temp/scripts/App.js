@@ -80,21 +80,24 @@
 // new RevealOnClick('starships');
 
 // console.log(location.hash);
-var openPages = Array.from(document.querySelectorAll('.modal'));
+// to build for local prod server with routing stick to the subfolder, set the base url to the name of the subfolder. ALSO change the folder destination in the gulp build task to the relevant subfolder.
+// var appBaseUrl = "/swapi";
+var appBaseUrl = "";
+var openModals = Array.from(document.querySelectorAll('.modal'));
 var activeRoutes = Array.from(document.querySelectorAll('[route]'));
 // console.log(activeRoutes);
 
 window.addEventListener('popstate', navigateOnPop);
 
-function openPage(pageId) {
+function openPage(modalHash) {
 
-  openPages.forEach(function (page) {
-    return page.classList.remove('modal--is-visible');
+  openModals.forEach(function (modal) {
+    return modal.classList.remove('modal--is-visible');
   });
 
   // console.log(pageId);
-  if (pageId !== '') {
-    var modal = document.querySelector(pageId);
+  if (modalHash !== '') {
+    var modal = document.querySelector(modalHash);
     // console.log(modal);
     modal.classList.add('modal--is-visible');
     // console.log(location.hash);
@@ -129,7 +132,7 @@ function navigate(e) {
   })[0];
 
   if (rPath) {
-    window.history.pushState({}, 'name', rPath.path);
+    window.history.pushState({}, 'name', '' + appBaseUrl + rPath.path);
     var route = rPath.hash;
     // console.log(`on clicked button: ${route}`);
     openPage(route);
@@ -145,7 +148,7 @@ function navigateOnPop() {
   console.log('on popstate: ' + currentPath);
 
   var rPath = pageRouter.routes.filter(function (r) {
-    return r.path === currentPath;
+    return '' + appBaseUrl + r.path === currentPath;
   })[0];
 
   if (rPath) {
@@ -194,10 +197,10 @@ console.log('on page load: ' + currentPath);
 // })[0];
 
 var rPath = pageRouter.routes.filter(function (r) {
-  return r.path === currentPath;
+  return '' + appBaseUrl + r.path === currentPath;
 })[0];
 
-// console.log(route);
+console.log(rPath);
 
 // if(rHash) {
 //   if(currentHash !== ''){ openPage(currentHash); }
@@ -207,7 +210,7 @@ var rPath = pageRouter.routes.filter(function (r) {
 
 if (rPath) {
   var route = rPath.hash;
-  // console.log(`on page load: ${route}`);
+  console.log('on page load: ' + route);
   openPage(route);
 } else {
   openPage('#error404');

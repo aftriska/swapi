@@ -5,14 +5,18 @@ usemin = require('gulp-usemin'),
 rev = require('gulp-rev'),
 cssnano = require('gulp-cssnano'),
 uglify = require('gulp-uglify'),
-browserSync = require('browser-sync').create();
+browserSync = require('browser-sync').create(),
+historyFallback = require('connect-history-api-fallback');
 
 gulp.task('previewDist', function() {
   browserSync.init({
     //to hide the notify block that appears everytime browser sync is called.
     notify: false,
     server: {
-      baseDir: "docs"
+      baseDir: "docs",
+      middleware: [
+        historyFallback()
+      ]
     }
   });
 });
