@@ -5,18 +5,20 @@ usemin = require('gulp-usemin'),
 rev = require('gulp-rev'),
 cssnano = require('gulp-cssnano'),
 uglify = require('gulp-uglify'),
-browserSync = require('browser-sync').create(),
-historyFallback = require('connect-history-api-fallback');
+browserSync = require('browser-sync').create();
+// ,
+// historyFallback = require('connect-history-api-fallback');
 
 gulp.task('previewDist', function() {
   browserSync.init({
     //to hide the notify block that appears everytime browser sync is called.
     notify: false,
     server: {
-      baseDir: "docs",
-      middleware: [
-        historyFallback()
-      ]
+      baseDir: "docs"
+      // ,
+      // middleware: [
+      //   historyFallback()
+      // ]
     }
   });
 });
@@ -39,7 +41,7 @@ gulp.task('copyGeneralFiles', ['deleteDistFolder'], function() {
   ]
 
   return gulp.src(pathToCopy)
-    .pipe(gulp.dest("./docs"));
+    .pipe(gulp.dest("./docs/swapi"));
 });
 
 // TO OPTIMIZE IMAGES
@@ -51,7 +53,7 @@ gulp.task('optimizeImages', ['deleteDistFolder'], function() {
       interlaced: true,
       multipass: true
     }))
-    .pipe(gulp.dest("./docs/assets/images"));
+    .pipe(gulp.dest("./docs/swapi/assets/images"));
 });
 
 gulp.task('useminTrigger', ['deleteDistFolder'], function() {
@@ -65,7 +67,7 @@ gulp.task('usemin', ['styles', 'scripts'], function() {
       css: [function() {return rev()}, function() {return cssnano()}],
       js: [function() {return rev()}, function() {return uglify()}]
     }))
-    .pipe(gulp.dest("./docs"));
+    .pipe(gulp.dest("./docs/swapi"));
 });
 
 gulp.task('build', ['deleteDistFolder', 'copyGeneralFiles', 'optimizeImages', 'useminTrigger']);

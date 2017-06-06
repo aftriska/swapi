@@ -1,9 +1,3 @@
-// import RevealOnClick from './modules/RevealOnClick';
-//
-// new RevealOnClick('films');
-// new RevealOnClick('people');
-// new RevealOnClick('starships');
-
 var openModals = Array.from(document.querySelectorAll('.modal'));
 
 function openPage(modalHash) {

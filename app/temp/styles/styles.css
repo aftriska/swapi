@@ -475,6 +475,16 @@ img {
 
 .primary-nav {
   margin-bottom: 10px;
+
+  /*button {
+    color: #fff;
+    font-weight: 300;
+    border: none;
+    display: block;
+    padding: 5px 10px;
+    font-size: 1.2rem;
+    background-color: navy;
+  }*/
 }
 
 .primary-nav ul {
@@ -499,20 +509,10 @@ img {
     padding-right: 0;
   }
 
-/*a {
+.primary-nav a {
     color: #fff;
     font-weight: 300;
     text-decoration: none;
-    display: block;
-    padding: 5px 10px;
-    font-size: 1.2rem;
-    background-color: navy;
-  }*/
-
-.primary-nav button {
-    color: #fff;
-    font-weight: 300;
-    border: none;
     display: block;
     padding: 5px 10px;
     font-size: 1.2rem;
