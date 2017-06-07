@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,63 +73,149 @@
 "use strict";
 
 
-// import RevealOnClick from './modules/RevealOnClick';
-//
-// new RevealOnClick('films');
-// new RevealOnClick('people');
-// new RevealOnClick('starships');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-var openModals = Array.from(document.querySelectorAll('.modal'));
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function openPage(modalHash) {
-  openModals.forEach(function (modal) {
-    return modal.classList.remove('modal--is-visible');
-  });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  if (modalHash !== '') {
-    var modal = document.querySelector(modalHash);
-    modal.classList.add('modal--is-visible');
+var NavigateHash = function () {
+  function NavigateHash(pageRouter, modals, errModul, menus, appBaseUrl) {
+    _classCallCheck(this, NavigateHash);
+
+    this.bUrl = appBaseUrl;
+    this.router = pageRouter;
+    this.modals = modals;
+    this.menus = menus;
+    this.currPath = location.pathname;
+    this.currHash = location.hash;
+    this.errHash = errModul;
+    this.navigate();
   }
-}
 
-function navigateHash() {
-  var currentHash = location.hash;
+  _createClass(NavigateHash, [{
+    key: 'navigate',
+    value: function navigate() {
+      var _this = this;
 
-  var rHash = pageRouter.routes.filter(function (r) {
-    return r.hash === currentHash;
-  })[0];
+      this.menus.style.display = 'block';
 
-  rHash ? openPage(rHash.hash) : openPage('#error404');
-}
+      var rPath = this.router.routes.filter(function (r) {
+        return '' + _this.bUrl + r.path === _this.currPath;
+      })[0];
 
-window.onhashchange = function () {
-  navigateHash();
-};
+      var rHash = this.router.routes.filter(function (r) {
+        return r.hash === _this.currHash;
+      })[0];
+
+      if (rPath) {
+        if (rHash) {
+          if (rHash.name !== "root") {
+            this.openPage(rHash.name);
+          } else {
+            this.hideModuls();
+          }
+        } else {
+          this.openPage(this.errHash);
+        }
+      } else {
+        this.menus.style.display = 'none';
+        this.openPage(this.errHash);
+      }
+    }
+  }, {
+    key: 'openPage',
+    value: function openPage(modalHash) {
+      this.hideModuls();
+      var modal = this.modals.find(function (m) {
+        return m.attributes[0].value === modalHash;
+      });
+
+      modal.classList.add('modal--is-visible');
+    }
+  }, {
+    key: 'hideModuls',
+    value: function hideModuls() {
+      this.modals.forEach(function (modal) {
+        return modal.classList.remove('modal--is-visible');
+      });
+    }
+  }]);
+
+  return NavigateHash;
+}();
+
+exports.default = NavigateHash;
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Router = function Router(name, routes) {
-  return {
-    name: name,
-    routes: routes
-  };
+  _classCallCheck(this, Router);
+
+  this.name = name;
+  this.routes = routes;
 };
 
-var pageRouter = new Router('pageRouter', [{
+exports.default = Router;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _Router = __webpack_require__(1);
+
+var _Router2 = _interopRequireDefault(_Router);
+
+var _NavigateHash = __webpack_require__(0);
+
+var _NavigateHash2 = _interopRequireDefault(_NavigateHash);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var appBaseUrl = "";
+var menus = document.querySelector('.primary-nav');
+var modals = Array.from(document.querySelectorAll('.modal'));
+var errModul = 'error404';
+
+var pageRouter = new _Router2.default('pageRouter', [{
   hash: '',
-  name: ''
+  name: 'root',
+  path: '/'
 }, {
   hash: '#films',
-  name: 'films'
+  name: 'films',
+  path: '/#films'
 }, {
   hash: '#people',
-  name: 'people'
+  name: 'people',
+  path: '/#people'
 }, {
   hash: '#starships',
-  name: 'starships'
+  name: 'starships',
+  path: '/#starships'
 }]);
 
-/** Start Part 1: To handle Error when user writes a non-exist hash directly on the browser. **/
-navigateHash();
-/** End of Part 1 **/
+new _NavigateHash2.default(pageRouter, modals, errModul, menus, appBaseUrl);
+
+window.onhashchange = function () {
+  new _NavigateHash2.default(pageRouter, modals, errModul, menus, appBaseUrl);
+};
 
 /***/ })
 /******/ ]);

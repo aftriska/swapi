@@ -1,60 +1,36 @@
-// import RevealOnClick from './modules/RevealOnClick';
-//
-// new RevealOnClick('films');
-// new RevealOnClick('people');
-// new RevealOnClick('starships');
+import Router from './modules/Router';
+import NavigateHash from './modules/NavigateHash';
 
-var openModals = Array.from(document.querySelectorAll('.modal'));
+const appBaseUrl = "";
+const menus = document.querySelector('.primary-nav');
+const modals = Array.from(document.querySelectorAll('.modal'));
+const errModul = 'error404';
 
-function openPage(modalHash) {
-  openModals.forEach(modal => modal.classList.remove('modal--is-visible'));
-
-  if(modalHash !== '') {
-    var modal = document.querySelector(modalHash);
-    modal.classList.add('modal--is-visible');
-  }
-}
-
-function navigateHash() {
-  var currentHash = location.hash;
-
-  var rHash = pageRouter.routes.filter(r => {
-    return r.hash === currentHash;
-  })[0];
-
-  (rHash) ? openPage(rHash.hash) : openPage('#error404');
-}
-
-window.onhashchange = function() {
-  navigateHash();
-};
-
-var Router = function(name, routes) {
-  return {
-    name: name,
-    routes: routes
-  }
-};
-
-var pageRouter = new Router('pageRouter', [
+const pageRouter = new Router('pageRouter', [
   {
     hash: '',
-    name: ''
+    name: 'root',
+    path: '/'
   },
   {
     hash: '#films',
-    name: 'films'
+    name: 'films',
+    path: '/#films'
   },
   {
     hash: '#people',
-    name: 'people'
+    name: 'people',
+    path: '/#people'
   },
   {
     hash: '#starships',
-    name: 'starships'
+    name: 'starships',
+    path: '/#starships'
   }
 ]);
 
-/** Start Part 1: To handle Error when user writes a non-exist hash directly on the browser. **/
-navigateHash();
-/** End of Part 1 **/
+new NavigateHash(pageRouter, modals, errModul, menus, appBaseUrl);
+
+window.onhashchange = () => {
+  new NavigateHash(pageRouter, modals, errModul, menus, appBaseUrl);
+};
