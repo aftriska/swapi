@@ -82,14 +82,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var NavigateHash = function () {
-  function NavigateHash(pageRouter, modals, errModul, menus, rootMenu, appBaseUrl) {
+  function NavigateHash(pageRouter, modals, errModul, menus, appBaseUrl) {
     _classCallCheck(this, NavigateHash);
 
     this.bUrl = appBaseUrl;
     this.router = pageRouter;
     this.modals = modals;
     this.menus = menus;
-    this.rootMenu = rootMenu;
     this.currPath = location.pathname;
     this.currHash = location.hash;
     this.errHash = errModul;
@@ -127,7 +126,6 @@ var NavigateHash = function () {
         this.menus.forEach(function (m) {
           return m.style.display = 'none';
         });
-        this.rootMenu.style.display = 'block';
         this.openPage(this.errHash);
       }
     }
@@ -196,7 +194,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var appBaseUrl = "";
 var menus = Array.from(document.querySelectorAll('.route'));
-var rootMenu = document.querySelector(".route-root");
 var modals = Array.from(document.querySelectorAll('.modal'));
 var errModul = 'error404';
 
@@ -230,10 +227,10 @@ var pageRouter = new _Router2.default('pageRouter', [{
   path: '/#vehicles'
 }]);
 
-new _NavigateHash2.default(pageRouter, modals, errModul, menus, rootMenu, appBaseUrl);
+new _NavigateHash2.default(pageRouter, modals, errModul, menus, appBaseUrl);
 
 window.onhashchange = function () {
-  new _NavigateHash2.default(pageRouter, modals, errModul, menus, rootMenu, appBaseUrl);
+  new _NavigateHash2.default(pageRouter, modals, errModul, menus, appBaseUrl);
 };
 
 /***/ })

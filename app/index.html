@@ -16,9 +16,10 @@
 
         </div>
         <div class="site-header__menu-content">
-          <nav class="primary-nav">
+          <nav class="primary-nav primary-nav--pull-right">
             <ul>
-              <li><a href="/" class="route route-root">HOME</a></li>
+              <li><button class="route">HOME</a></li>
+              <!-- Home Button to clear opened moduls and when clicked on Error 404 Page, will also shows all the links. Gotta push history too though! -->
               <li><a href="#films" class="route">FILMS</a></li>
               <li><a href="#people" class="route">PEOPLE</a></li>
               <li><a href="#species" class="route">SPECIES</a></li>
@@ -31,31 +32,47 @@
       </div>
     </header>
 
-    <div class="wrapper">
-      <div id="page-section" class="page-section">
-        <div id="error404" class="modal">
-          <p>Error 404!</p>
-        </div>
-        <div id="films" class="modal">
-          <p>This section is to put the films list.</p>
-        </div>
-        <div id="people" class="modal">
-          <p>This section is to put the characters list.</p>
-        </div>
-        <div id="species" class="modal">
-          <p>This section is to put the species list.</p>
-        </div>
-        <div id="planets" class="modal">
-          <p>This section is to put the planets list.</p>
-        </div>
-        <div id="starships" class="modal">
-          <p>This section is to put the starships list.</p>
-        </div>
-        <div id="vehicles" class="modal">
-          <p>This section is to put the vehicles list.</p>
-        </div>
+    <div id="error404" class="modal">
+      <div class="wrapper">
+        <p>Error 404!</p>
       </div>
     </div>
+    <div id="films" class="modal">
+      <div class="wrapper">
+        <p>This section is to put the films list.</p>
+      </div>
+    </div>
+    <div id="people" class="modal">
+      <div class="wrapper">
+        <p>This section is to put the characters list.</p>
+      </div>
+    </div>
+    <div id="species" class="modal">
+      <div class="wrapper">
+        <p>This section is to put the species list.</p>
+      </div>
+    </div>
+    <div id="planets" class="modal">
+      <div class="wrapper">
+        <p>This section is to put the planets list.</p>
+      </div>
+    </div>
+    <div id="starships" class="modal">
+      <div class="wrapper">
+        <p>This section is to put the starships list.</p>
+      </div>
+    </div>
+    <div id="vehicles" class="modal">
+      <div class="wrapper">
+        <p>This section is to put the vehicles list.</p>
+      </div>
+    </div>
+
+    <!-- <div class="wrapper">
+      <div id="page-section" class="page-section">
+
+      </div>
+    </div> -->
   <!-- build:js assets/scripts/App.js -->
   <script src="/temp/scripts/App.js"></script>
   <!-- endbuild -->

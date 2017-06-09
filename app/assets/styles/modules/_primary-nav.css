@@ -1,8 +1,11 @@
 .primary-nav {
-  padding-top: 20px;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-  background-color: rgba(#000, .5);
+  padding-top: 10px;
+
+  &--pull-right {
+    @mixin atMedium {
+      float: right;
+    }
+  }
 
   ul {
     margin: 0;
@@ -24,20 +27,23 @@
 
   a {
     color: $mainYellow;
-    font-weight: 200;
+    font-weight: 400;
     text-decoration: none;
+    letter-spacing: .1rem;
     display: block;
-    padding: 5px 5px;
+    padding: 5px 10px;
     font-size: 1rem;
   }
 
-  /*button {
-    color: #fff;
-    font-weight: 300;
+  button {
+    color: $mainYellow;
+    cursor: pointer;
+    font-weight: 400;
     border: none;
+    letter-spacing: .1rem;
     display: block;
     padding: 5px 10px;
-    font-size: 1.2rem;
-    background-color: navy;
-  }*/
+    font-size: 1rem;
+    background-color: inherit;
+  }
 }

@@ -3,7 +3,6 @@ import NavigateHash from './modules/NavigateHash';
 
 const appBaseUrl = "";
 const menus = Array.from(document.querySelectorAll('.route'));
-const rootMenu = document.querySelector(".route-root");
 const modals = Array.from(document.querySelectorAll('.modal'));
 const errModul = 'error404';
 
@@ -45,8 +44,8 @@ const pageRouter = new Router('pageRouter', [
   }
 ]);
 
-new NavigateHash(pageRouter, modals, errModul, menus, rootMenu, appBaseUrl);
+new NavigateHash(pageRouter, modals, errModul, menus, appBaseUrl);
 
 window.onhashchange = () => {
-  new NavigateHash(pageRouter, modals, errModul, menus, rootMenu, appBaseUrl);
+  new NavigateHash(pageRouter, modals, errModul, menus, appBaseUrl);
 };
