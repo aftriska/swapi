@@ -1,5 +1,8 @@
 .primary-nav {
+  padding-top: 20px;
+  padding-bottom: 10px;
   margin-bottom: 10px;
+  background-color: rgba(#000, .5);
 
   ul {
     margin: 0;
@@ -12,7 +15,7 @@
     list-style: none;
     display: block;
     float: left;
-    padding-right: 5px;
+    padding-right: 1px;
   }
 
   li:last-child {
@@ -20,13 +23,12 @@
   }
 
   a {
-    color: #fff;
-    font-weight: 300;
+    color: $mainYellow;
+    font-weight: 200;
     text-decoration: none;
     display: block;
-    padding: 5px 10px;
-    font-size: 1.2rem;
-    background-color: navy;
+    padding: 5px 5px;
+    font-size: 1rem;
   }
 
   /*button {

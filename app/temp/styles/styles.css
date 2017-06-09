@@ -451,6 +451,7 @@ template {
 
 body {
   font-family: 'Roboto', sans-serif;
+  background: #272C35;
 }
 
 img {
@@ -464,7 +465,7 @@ img {
 }
 
 .wrapper {
-  border: 1px solid red;
+  /*border: 1px solid red;*/
   overflow: hidden;
   padding-left: 18px;
   padding-right: 18px;
@@ -474,7 +475,10 @@ img {
 }
 
 .primary-nav {
+  padding-top: 20px;
+  padding-bottom: 10px;
   margin-bottom: 10px;
+  background-color: rgba(0,0,0, .5);
 
   /*button {
     color: #fff;
@@ -502,7 +506,7 @@ img {
     list-style: none;
     display: block;
     float: left;
-    padding-right: 5px;
+    padding-right: 1px;
   }
 
 .primary-nav li:last-child {
@@ -510,13 +514,12 @@ img {
   }
 
 .primary-nav a {
-    color: #fff;
-    font-weight: 300;
+    color: #EDEC51;
+    font-weight: 200;
     text-decoration: none;
     display: block;
-    padding: 5px 10px;
-    font-size: 1.2rem;
-    background-color: navy;
+    padding: 5px 5px;
+    font-size: 1rem;
   }
 
 .page-section {

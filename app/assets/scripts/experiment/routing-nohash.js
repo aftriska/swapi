@@ -1,6 +1,10 @@
 // If using a subfolder as the root of the Single Page Application, set the appBaseUrl to: "/subfolder_name".
 // When building the production folder using gulp build task, the gulp destination MUST BE ALSO set to the relevant subfolder.
 // For example: var appBaseUrl = "/swapi";
+// Add these lines below in the index.html when using buttons as links.
+// <li><button route="/films" class="route">Films</button></li>
+// <li><button route="/people" class="route">People</button></li>
+// <li><button route="/starships" class="route">Starships</button></li>
 
 var appBaseUrl = "";
 var openModals = Array.from(document.querySelectorAll('.modal'));

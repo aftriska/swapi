@@ -82,13 +82,14 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var NavigateHash = function () {
-  function NavigateHash(pageRouter, modals, errModul, menus, appBaseUrl) {
+  function NavigateHash(pageRouter, modals, errModul, menus, rootMenu, appBaseUrl) {
     _classCallCheck(this, NavigateHash);
 
     this.bUrl = appBaseUrl;
     this.router = pageRouter;
     this.modals = modals;
     this.menus = menus;
+    this.rootMenu = rootMenu;
     this.currPath = location.pathname;
     this.currHash = location.hash;
     this.errHash = errModul;
@@ -100,7 +101,9 @@ var NavigateHash = function () {
     value: function navigate() {
       var _this = this;
 
-      this.menus.style.display = 'block';
+      this.menus.forEach(function (m) {
+        return m.style.display = 'block';
+      });
 
       var rPath = this.router.routes.filter(function (r) {
         return '' + _this.bUrl + r.path === _this.currPath;
@@ -121,7 +124,10 @@ var NavigateHash = function () {
           this.openPage(this.errHash);
         }
       } else {
-        this.menus.style.display = 'none';
+        this.menus.forEach(function (m) {
+          return m.style.display = 'none';
+        });
+        this.rootMenu.style.display = 'block';
         this.openPage(this.errHash);
       }
     }
@@ -188,8 +194,9 @@ var _NavigateHash2 = _interopRequireDefault(_NavigateHash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var appBaseUrl = "/swapi";
-var menus = document.querySelector('.primary-nav');
+var appBaseUrl = "";
+var menus = Array.from(document.querySelectorAll('.route'));
+var rootMenu = document.querySelector(".route-root");
 var modals = Array.from(document.querySelectorAll('.modal'));
 var errModul = 'error404';
 
@@ -209,12 +216,24 @@ var pageRouter = new _Router2.default('pageRouter', [{
   hash: '#starships',
   name: 'starships',
   path: '/#starships'
+}, {
+  hash: '#species',
+  name: 'species',
+  path: '/#species'
+}, {
+  hash: '#planets',
+  name: 'planets',
+  path: '/#planets'
+}, {
+  hash: '#vehicles',
+  name: 'vehicles',
+  path: '/#vehicles'
 }]);
 
-new _NavigateHash2.default(pageRouter, modals, errModul, menus, appBaseUrl);
+new _NavigateHash2.default(pageRouter, modals, errModul, menus, rootMenu, appBaseUrl);
 
 window.onhashchange = function () {
-  new _NavigateHash2.default(pageRouter, modals, errModul, menus, appBaseUrl);
+  new _NavigateHash2.default(pageRouter, modals, errModul, menus, rootMenu, appBaseUrl);
 };
 
 /***/ })
