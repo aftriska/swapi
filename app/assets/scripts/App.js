@@ -1,7 +1,7 @@
 import Router from './modules/Router';
 import NavigateHash from './modules/NavigateHash';
 
-const appBaseUrl = "";
+const appBaseUrl = "/";
 const menus = document.querySelector('.primary-nav');
 const modals = Array.from(document.querySelectorAll('.modal'));
 const errModul = 'error404';

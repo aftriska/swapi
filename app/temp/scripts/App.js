@@ -188,7 +188,7 @@ var _NavigateHash2 = _interopRequireDefault(_NavigateHash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var appBaseUrl = "";
+var appBaseUrl = "/swapi";
 var menus = document.querySelector('.primary-nav');
 var modals = Array.from(document.querySelectorAll('.modal'));
 var errModul = 'error404';

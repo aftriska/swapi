@@ -5,25 +5,22 @@ usemin = require('gulp-usemin'),
 rev = require('gulp-rev'),
 cssnano = require('gulp-cssnano'),
 uglify = require('gulp-uglify'),
-browserSync = require('browser-sync').create();
-// ,
-// historyFallback = require('connect-history-api-fallback');
+browserSync = require('browser-sync').create(),
+historyFallback = require('connect-history-api-fallback');
 
-gulp.task('previewDist', function() {
+gulp.task('previewProd', function() {
   browserSync.init({
-    //to hide the notify block that appears everytime browser sync is called.
     notify: false,
     server: {
-      baseDir: "docs"
-      // ,
-      // middleware: [
-      //   historyFallback()
-      // ]
+      baseDir: "docs",
+      middleware: [
+        historyFallback()
+      ]
     }
   });
 });
 
-//MUST DELETE THE EXISTING DIST FOLDER EVERYTIME BUILD RUNS
+//MUST DELETE THE EXISTING DOCS FOLDER EVERYTIME BUILD RUNS
 gulp.task('deleteDistFolder', function() {
   return del("./docs");
 });
