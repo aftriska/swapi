@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -81,17 +81,66 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var HomeButton = function () {
+  function HomeButton() {
+    _classCallCheck(this, HomeButton);
+
+    this.btn = document.querySelector('[name=route]');
+    this.bUrl = "/";
+    this.modals = Array.from(document.querySelectorAll('.modal'));
+    this.menus = Array.from(document.querySelectorAll('.route'));
+    this.events();
+  }
+
+  _createClass(HomeButton, [{
+    key: 'events',
+    value: function events() {
+      this.btn.addEventListener('click', this.clearPage.bind(this));
+    }
+  }, {
+    key: 'clearPage',
+    value: function clearPage() {
+      window.history.pushState({}, "name", this.bUrl);
+      this.menus.forEach(function (m) {
+        return m.style.display = 'block';
+      });
+      this.modals.forEach(function (modal) {
+        return modal.classList.remove('modal--is-visible');
+      });
+    }
+  }]);
+
+  return HomeButton;
+}();
+
+exports.default = HomeButton;
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var NavigateHash = function () {
-  function NavigateHash(pageRouter, modals, errModul, menus, appBaseUrl) {
+  function NavigateHash(pageRouter) {
     _classCallCheck(this, NavigateHash);
 
-    this.bUrl = appBaseUrl;
     this.router = pageRouter;
-    this.modals = modals;
-    this.menus = menus;
+    this.bUrl = "";
+    this.modals = Array.from(document.querySelectorAll('.modal'));
+    this.menus = Array.from(document.querySelectorAll('.route'));;
     this.currPath = location.pathname;
     this.currHash = location.hash;
-    this.errHash = errModul;
+    this.errHash = 'error404';
     this.navigate();
   }
 
@@ -126,6 +175,7 @@ var NavigateHash = function () {
         this.menus.forEach(function (m) {
           return m.style.display = 'none';
         });
+
         this.openPage(this.errHash);
       }
     }
@@ -154,7 +204,7 @@ var NavigateHash = function () {
 exports.default = NavigateHash;
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -176,26 +226,25 @@ var Router = function Router(name, routes) {
 exports.default = Router;
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _Router = __webpack_require__(1);
+var _Router = __webpack_require__(2);
 
 var _Router2 = _interopRequireDefault(_Router);
 
-var _NavigateHash = __webpack_require__(0);
+var _NavigateHash = __webpack_require__(1);
 
 var _NavigateHash2 = _interopRequireDefault(_NavigateHash);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _HomeButton = __webpack_require__(0);
 
-var appBaseUrl = "";
-var menus = Array.from(document.querySelectorAll('.route'));
-var modals = Array.from(document.querySelectorAll('.modal'));
-var errModul = 'error404';
+var _HomeButton2 = _interopRequireDefault(_HomeButton);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var pageRouter = new _Router2.default('pageRouter', [{
   hash: '',
@@ -227,11 +276,17 @@ var pageRouter = new _Router2.default('pageRouter', [{
   path: '/#vehicles'
 }]);
 
-new _NavigateHash2.default(pageRouter, modals, errModul, menus, appBaseUrl);
+new _NavigateHash2.default(pageRouter);
 
 window.onhashchange = function () {
-  new _NavigateHash2.default(pageRouter, modals, errModul, menus, appBaseUrl);
+  new _NavigateHash2.default(pageRouter);
 };
+
+window.onpopstate = function () {
+  new _NavigateHash2.default(pageRouter);
+};
+
+var homeButton = new _HomeButton2.default();
 
 /***/ })
 /******/ ]);

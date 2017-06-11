@@ -1,12 +1,12 @@
 class NavigateHash {
-  constructor(pageRouter, modals, errModul, menus, appBaseUrl) {
-    this.bUrl   = appBaseUrl;
+  constructor(pageRouter) {
     this.router = pageRouter;
-    this.modals = modals;
-    this.menus  = menus;
+    this.bUrl   = "";
+    this.modals = Array.from(document.querySelectorAll('.modal'));
+    this.menus  = Array.from(document.querySelectorAll('.route'));;
     this.currPath = location.pathname;
     this.currHash = location.hash;
-    this.errHash = errModul;
+    this.errHash = 'error404';
     this.navigate();
   }
 
@@ -33,6 +33,7 @@ class NavigateHash {
       }
     } else {
       this.menus.forEach(m => m.style.display = 'none');
+
       this.openPage(this.errHash);
     }
   }

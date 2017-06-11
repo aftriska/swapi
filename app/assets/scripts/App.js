@@ -1,10 +1,6 @@
 import Router from './modules/Router';
 import NavigateHash from './modules/NavigateHash';
-
-const appBaseUrl = "";
-const menus = Array.from(document.querySelectorAll('.route'));
-const modals = Array.from(document.querySelectorAll('.modal'));
-const errModul = 'error404';
+import HomeButton from './modules/HomeButton';
 
 const pageRouter = new Router('pageRouter', [
   {
@@ -44,8 +40,14 @@ const pageRouter = new Router('pageRouter', [
   }
 ]);
 
-new NavigateHash(pageRouter, modals, errModul, menus, appBaseUrl);
+new NavigateHash(pageRouter);
 
 window.onhashchange = () => {
-  new NavigateHash(pageRouter, modals, errModul, menus, appBaseUrl);
+  new NavigateHash(pageRouter);
 };
+
+window.onpopstate = () => {
+  new NavigateHash(pageRouter);
+};
+
+const homeButton = new HomeButton();
