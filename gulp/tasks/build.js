@@ -21,12 +21,12 @@ gulp.task('previewProd', function() {
 });
 
 //MUST DELETE THE EXISTING DOCS FOLDER EVERYTIME BUILD RUNS
-gulp.task('deleteDistFolder', function() {
+gulp.task('deleteDocsFolder', function() {
   return del("./docs");
 });
 
 // TO COPY OTHER necessary folder/files, for example for when we use wordpress.
-gulp.task('copyGeneralFiles', ['deleteDistFolder'], function() {
+gulp.task('copyGeneralFiles', ['deleteDocsFolder'], function() {
   var pathToCopy = [
     './app/**/*',
     '!./app/index.html',
@@ -38,11 +38,11 @@ gulp.task('copyGeneralFiles', ['deleteDistFolder'], function() {
   ]
 
   return gulp.src(pathToCopy)
-    .pipe(gulp.dest("./docs/swapi"));
+    .pipe(gulp.dest("./docs"));
 });
 
 // TO OPTIMIZE IMAGES
-gulp.task('optimizeImages', ['deleteDistFolder'], function() {
+gulp.task('optimizeImages', ['deleteDocsFolder'], function() {
   return gulp.src(['./app/assets/images/**/*', '!./app/assets/images/icons', '!./app/assets/images/icons/**/*',
   '!./app/assets/images/**/*-i.*'])
     .pipe(imagemin({
@@ -50,10 +50,10 @@ gulp.task('optimizeImages', ['deleteDistFolder'], function() {
       interlaced: true,
       multipass: true
     }))
-    .pipe(gulp.dest("./docs/swapi/assets/images"));
+    .pipe(gulp.dest("./docs/assets/images"));
 });
 
-gulp.task('useminTrigger', ['deleteDistFolder'], function() {
+gulp.task('useminTrigger', ['deleteDocsFolder'], function() {
   gulp.start('usemin');
 });
 
@@ -64,7 +64,7 @@ gulp.task('usemin', ['styles', 'scripts'], function() {
       css: [function() {return rev()}, function() {return cssnano()}],
       js: [function() {return rev()}, function() {return uglify()}]
     }))
-    .pipe(gulp.dest("./docs/swapi"));
+    .pipe(gulp.dest("./docs"));
 });
 
-gulp.task('build', ['deleteDistFolder', 'copyGeneralFiles', 'optimizeImages', 'useminTrigger']);
+gulp.task('build', ['deleteDocsFolder', 'copyGeneralFiles', 'optimizeImages', 'useminTrigger']);
