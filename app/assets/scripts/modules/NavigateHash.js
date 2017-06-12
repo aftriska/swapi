@@ -1,7 +1,7 @@
 class NavigateHash {
   constructor(pageRouter) {
     this.router = pageRouter;
-    this.bUrl   = "/swapi";
+    this.bUrl   = "";
     this.modals = Array.from(document.querySelectorAll('.modal'));
     this.menus  = Array.from(document.querySelectorAll('.route'));;
     this.currPath = location.pathname;
@@ -13,7 +13,7 @@ class NavigateHash {
   navigate() {
     this.menus.forEach(m => m.style.display = 'block');
 
-    var rPath = this.router.routes.filter(r => {
+    const rPath = this.router.routes.filter(r => {
       return `${this.bUrl}${r.path}` === this.currPath;
     })[0];
 
@@ -40,6 +40,7 @@ class NavigateHash {
 
   openPage(modalHash) {
     this.hideModuls();
+
     const modal = this.modals.find(m => {
       return m.attributes[0].value === modalHash;
     });

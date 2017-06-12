@@ -41,13 +41,16 @@ const pageRouter = new Router('pageRouter', [
 ]);
 
 new NavigateHash(pageRouter);
+// fill the relevant page with data , if the site loaded the url with the existing hash already.
 
 window.onhashchange = () => {
   new NavigateHash(pageRouter);
+  // fill the relevant page with data
 };
 
 window.onpopstate = () => {
   new NavigateHash(pageRouter);
+  // fill the relevant page with data
 };
 
 const homeButton = new HomeButton();
