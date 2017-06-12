@@ -6,6 +6,15 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700' rel='stylesheet' type='text/css'>
     <title>Star Wars Directory with SWAPI</title>
     <link rel="stylesheet" href="assets/styles/styles-6c5bbba268.css"/>
+    <script>
+    (function(){
+      var redirect = sessionStorage.redirect;
+      delete sessionStorage.redirect;
+      if (redirect && redirect != location.href) {
+        history.replaceState(null, null, redirect);
+      }
+    })();
+  </script>
   </head>
   <body>
     <header class="site-header">
