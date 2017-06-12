@@ -86,7 +86,7 @@ var HomeButton = function () {
     _classCallCheck(this, HomeButton);
 
     this.btn = document.querySelector('[name=route]');
-    this.bUrl = "/";
+    this.bUrl = "/swapi/";
     this.modals = Array.from(document.querySelectorAll('.modal'));
     this.menus = Array.from(document.querySelectorAll('.route'));
     this.events();
@@ -135,7 +135,7 @@ var NavigateHash = function () {
     _classCallCheck(this, NavigateHash);
 
     this.router = pageRouter;
-    this.bUrl = "";
+    this.bUrl = "/swapi";
     this.modals = Array.from(document.querySelectorAll('.modal'));
     this.menus = Array.from(document.querySelectorAll('.route'));;
     this.currPath = location.pathname;

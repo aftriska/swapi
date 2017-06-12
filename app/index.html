@@ -8,6 +8,15 @@
     <!-- build:css assets/styles/styles.css -->
     <link rel="stylesheet" href="temp/styles/styles.css">
     <!-- endbuild -->
+    <script>
+      (function(){
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect != location.href) {
+          history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
   </head>
   <body>
     <header class="site-header">

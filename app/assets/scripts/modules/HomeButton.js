@@ -1,7 +1,7 @@
 class HomeButton {
   constructor() {
     this.btn = document.querySelector('[name=route]');
-    this.bUrl = "/";
+    this.bUrl = "/swapi/";
     this.modals = Array.from(document.querySelectorAll('.modal'));
     this.menus  = Array.from(document.querySelectorAll('.route'));
     this.events();

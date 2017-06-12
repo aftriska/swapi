@@ -1,7 +1,7 @@
 class NavigateHash {
   constructor(pageRouter) {
     this.router = pageRouter;
-    this.bUrl   = "";
+    this.bUrl   = "/swapi";
     this.modals = Array.from(document.querySelectorAll('.modal'));
     this.menus  = Array.from(document.querySelectorAll('.route'));;
     this.currPath = location.pathname;
