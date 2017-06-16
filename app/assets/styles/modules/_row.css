@@ -1,0 +1,27 @@
+.row {
+  @mixin clearfix;
+
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  margin-top: 20px;
+
+  & > div {
+    display: flex;
+  }
+
+  &__large-3 {
+    float: left;
+    width: 25%;
+  }
+
+  &__large-4 {
+    float: left;
+    width: 33.33%;
+  }
+
+  &__large-6 {
+    float: left;
+    width: 50%;
+  }
+}

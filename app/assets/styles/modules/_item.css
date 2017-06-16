@@ -1,0 +1,18 @@
+.item {
+
+  &-title {
+    color: #000;
+    text-shadow: 1px 1px 1px $mainYellow, -1px 1px 1px $mainYellow, 1px -1px 1px $mainYellow, -1px -1px 1px $mainYellow;
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 0.5rem;
+    /*border: 1px solid red;*/
+    margin-bottom: 40px;
+  }
+
+  &-description {
+    font-style: italic;
+    /*border: 1px solid red;*/
+  }
+
+}

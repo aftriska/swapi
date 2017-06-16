@@ -1,6 +1,6 @@
 body {
   font-family: 'Roboto', sans-serif;
-  background: #272C35;
+  background: $mainDarkGrey;
 }
 
 img {
@@ -10,4 +10,10 @@ img {
 
 * {
   box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: $mainYellow;
+  font-weight: 300;
 }
