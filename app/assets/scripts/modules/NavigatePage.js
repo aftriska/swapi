@@ -25,6 +25,7 @@ class NavigatePage {
       if(validHash) {
         if(validHash.name !== "root") {
           this.openPage(validHash.name);
+          return validHash.name;
         } else {
           this.hideAllModuls();
         }

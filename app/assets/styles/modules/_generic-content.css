@@ -3,4 +3,8 @@
     line-height: 1.6rem;
     font-weight: 100;
   }
+
+  .subtitle-yellow {
+    color: $mainYellow;
+  }
 }

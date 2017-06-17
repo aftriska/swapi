@@ -208,6 +208,7 @@ var NavigatePage = function () {
         if (validHash) {
           if (validHash.name !== "root") {
             this.openPage(validHash.name);
+            return validHash.name;
           } else {
             this.hideAllModuls();
           }
@@ -333,9 +334,136 @@ var _GetLocalData2 = _interopRequireDefault(_GetLocalData);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+var isFetching = false;
+var fetchBaseUrl = 'http://swapi.co/api/';
 var pageRouter = new _Router2.default();
 var homeButton = new _HomeButton2.default();
-// const nextPages = JSON.parse(localStorage.getItem('nextPages')) || {};
+var nextPages = JSON.parse(sessionStorage.getItem('nextPages')) || {
+  films: fetchBaseUrl + 'films/',
+  people: fetchBaseUrl + 'people/',
+  species: fetchBaseUrl + 'species/',
+  planets: fetchBaseUrl + 'planets/',
+  starships: fetchBaseUrl + 'starships/',
+  vehicles: fetchBaseUrl + 'vehicles/'
+};
+
+sessionStorage.setItem('nextPages', JSON.stringify(nextPages));
+
+function setInitialModulContent() {
+  var visibleModal = document.querySelector('.modal--is-visible');
+  if (!visibleModal) return;
+
+  var rowContent = visibleModal.querySelector(".row");
+
+  if (rowContent.innerHTML === "") {
+    console.log('modul has no content');
+    var toFetch = rowContent.dataset.page;
+    console.log('page to fetch: ' + toFetch);
+
+    var dataToShow = JSON.parse(sessionStorage.getItem('' + toFetch)) || [];
+    console.log('local data for ' + toFetch + ' is:');
+    console.log(dataToShow);
+
+    if (dataToShow.length === 0) {
+      console.log('data not yet exist. the fetch method will start.');
+      // if local storage is empty, means this is the first time we fetched a data (fetching cannot be canceled, so if somehow while fetching, the user click another hash, then this fetch must put the result in the right modul and local Storage, because once user click another hash/url, the visible modul will be changed :( ..... AAARRRGHHHH!!!)
+      // fetch data
+      // set next page
+      // store data to local storage
+      // populate data with local storage
+
+      var urlToFetch = nextPages['' + toFetch];
+      console.log('urlToFetch: ' + urlToFetch);
+
+      isFetching = true;
+      console.log('isFetching = ' + isFetching);
+
+      fetch(urlToFetch).then(function (blob) {
+        return blob.json();
+      }).then(function (data) {
+        // console.log(data);
+
+        nextPages['' + toFetch] = data.next;
+        sessionStorage.setItem('nextPages', JSON.stringify(nextPages));
+
+        dataToShow.push.apply(dataToShow, _toConsumableArray(data.results));
+        sessionStorage.setItem('' + toFetch, JSON.stringify(dataToShow));
+
+        console.log('now we can insert a content to the modul');
+        showData(toFetch);
+
+        isFetching = false;
+        console.log('isFetching = ' + isFetching);
+
+        // setNextPage(pageToFetch, data.next);
+        // tempResults.length = 0;
+        // tempResults.push(...data.results);
+        // insertData();
+      }).catch(function (error) {
+        console.log('There has been a problem with your fetch operation: ' + error.message);
+      });
+    } else {
+      console.log('show data from local storage');
+      showData(toFetch);
+    }
+  } else {
+    console.log('modul has content, there\'s nothing to do on the page. Use scroll to load more data.');
+  }
+}
+
+function showData(toFetch) {
+  switch (toFetch) {
+    case 'films':
+      showFilms();
+      break;
+    case 'people':
+      console.log('show people');
+      break;
+    case 'species':
+      console.log('show species');
+      break;
+    case 'planets':
+      console.log('show planets');
+      break;
+    case 'starships':
+      console.log('show starships');
+      break;
+    case 'vehicles':
+      console.log('show vehicles');
+      break;
+  }
+}
+
+function showFilms() {
+  var toInsert = document.querySelector('div[data-page=films');
+  console.log(toInsert);
+  var filmsData = JSON.parse(sessionStorage.getItem('films'));
+
+  var ordered = filmsData.sort(function (a, b) {
+    return a.release_date > b.release_date ? 1 : -1;
+  });
+  // console.log(ordered);
+
+  toInsert.innerHTML = ordered.map(function (data, i) {
+    var d = new Date(data.release_date);
+    var newDate = d.toDateString();
+    var shortDesc = data.opening_crawl.substr(0, 199);
+    return '\n    <div class="row__large-6">\n      <div class="modal__item">\n        <p><h4 class="item-top-title">EPISODE ' + data.episode_id + '</h4></p>\n        <p><h3 class="item-title">' + data.title + '</h3></p>\n        <p><span class="subtitle-yellow">Director:</span> ' + data.director + ' <span class="subtitle-yellow">Producer:</span> ' + data.producer + ' <span class="subtitle-yellow">Release Date:</span> ' + newDate + '</p>\n        <p><span class="item-description">' + shortDesc + '...<button class="item-extend-description">...more</button>\n        <p><span class="subtitle-yellow">In the film:<span></p>\n        <div class="item-details"><button>Characters</button> <button>Planets</button><button>Starships</button><button>Vehicles</button><button>Species</button></div>\n        </p>\n      </div>\n    </div>\n    ';
+  }).join('');
+}
+
+function animateModulItems(toFetch) {
+  var modalItems = Array.from(document.querySelector('div[data-page=' + toFetch + ']').querySelectorAll('.modal__item'));
+
+  console.log(modalItems);
+
+  modalItems.forEach(function (item) {
+    return item.classList.add('modal__item--inserted');
+  });
+}
+
 // const tempResults = [];
 //
 // function setNextPages() {
@@ -373,23 +501,21 @@ var homeButton = new _HomeButton2.default();
 //   tempResults.forEach(r => console.log("hi"));
 // }
 
-window.addEventListener('load', function () {
-  new _NavigatePage2.default(pageRouter);
-  // setNextPages();
-  manipulateModal();
-});
+window.addEventListener('load', loadPage);
+window.onpopstate = loadPage;
 
-window.onpopstate = function () {
-  new _NavigatePage2.default(pageRouter);
-  // setNextPages();
-  manipulateModal();
-};
+function loadPage() {
+  var pageToLoad = new _NavigatePage2.default(pageRouter);
+  setInitialModulContent();
+  setLoadOnScroll();
+}
 
-function manipulateModal() {
-  var openedModal = document.querySelector('.modal--is-visible');
-  if (openedModal) {
-    // console.log(openedModal.style.getPropertyValue('height'));
-    openedModal.addEventListener('scroll', debounce(checkSlide));
+window.addEventListener('scroll', debounce(checkBottom));
+
+function setLoadOnScroll() {
+  var visibleModal = document.querySelector('.modal--is-visible');
+  if (visibleModal) {
+    visibleModal.addEventListener('scroll', debounce(checkBottom));
   }
 }
 
@@ -412,17 +538,24 @@ function debounce(func) {
   };
 };
 
-function checkSlide(e) {
-  // console.log(e);
-  // console.log(`e.target.offsetHeight: ${e.target.offsetHeight}`);
-  // console.log(e.target.scrollTop);
-  // console.log(e.target.scrollHeight);
-
+function checkBottom(e) {
+  // console.log(e.target.id);
   var modulBottom = e.target.scrollTop + e.target.offsetHeight;
-  // console.log(`modulBottom: ${modulBottom}`);
-
   if (modulBottom >= e.target.scrollHeight) {
     console.log("bottom reached");
+    // if isLoading is true, then do nothing (as the current fetch event is still occuring)
+    if (isFetching === false) {
+      // if nextPage is not null: fetch new data.
+      var nextPage = nextPages['' + e.target.id];
+      if (nextPage !== null) {
+        isFetching = true; // while fetching data, we pause every event on when the bottom of the page reached if user plays with the scrolling.
+        console.log('fetching data...');
+        // fetch data
+        // set next page
+        // store data to local storage
+        // populate data with local storage
+      }
+    }
   }
 }
 
