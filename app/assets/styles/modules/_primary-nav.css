@@ -1,4 +1,8 @@
 .primary-nav {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+
   padding-top: 10px;
 
   &--pull-right {
@@ -10,15 +14,16 @@
   ul {
     margin: 0;
     padding: 0;
-
+    display: flex;
+    align-items: center;
     @mixin clearfix;
   }
 
   li {
     list-style: none;
-    display: block;
+    display: flex;
+    vertical-align: middle;
     float: left;
-    padding-right: 1px;
   }
 
   li:last-child {
@@ -33,6 +38,13 @@
     display: block;
     padding: 5px 10px;
     font-size: 1rem;
+
+    &.larger {
+      text-shadow: 1px 1px 1px white;
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: 0.2rem;
+    }
   }
 
   button {
@@ -46,5 +58,16 @@
     padding: 5px 10px;
     font-size: 1rem;
     background-color: inherit;
+
+    &.larger {
+      text-shadow: 1px 1px 1px white;
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: 0.2rem;
+    }
   }
+/*
+  .button--larger {
+    font-size: 2rem;
+  }*/
 }

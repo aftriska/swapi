@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,491 +73,241 @@
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var GetLocalData = function () {
-  function GetLocalData(storageName) {
-    _classCallCheck(this, GetLocalData);
-
-    this.storageName = storageName;
-    this.getData();
-  }
-
-  _createClass(GetLocalData, [{
-    key: "getData",
-    value: function getData() {
-      return JSON.parse(localStorage.getItem(this.storageName)) || [];
-    }
-  }]);
-
-  return GetLocalData;
-}();
-
-exports.default = GetLocalData;
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var HomeButton = function () {
-  function HomeButton() {
-    _classCallCheck(this, HomeButton);
-
-    this.homeBtn = document.querySelector('[name=route]');
-    this.baseUrl = "/";
-    this.modals = Array.from(document.querySelectorAll('.modal'));
-    this.menus = Array.from(document.querySelectorAll('.route'));
-    this.events();
-  }
-
-  _createClass(HomeButton, [{
-    key: 'events',
-    value: function events() {
-      this.homeBtn.addEventListener('click', this.clearPage.bind(this));
-    }
-  }, {
-    key: 'clearPage',
-    value: function clearPage() {
-      window.history.pushState({}, "name", this.baseUrl);
-      this.showMenus();
-      this.hideModals();
-    }
-  }, {
-    key: 'showMenus',
-    value: function showMenus() {
-      this.menus.forEach(function (m) {
-        return m.style.display = 'block';
-      });
-    }
-  }, {
-    key: 'hideModals',
-    value: function hideModals() {
-      this.modals.forEach(function (modal) {
-        return modal.classList.remove('modal--is-visible');
-      });
-    }
-  }]);
-
-  return HomeButton;
-}();
-
-exports.default = HomeButton;
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var NavigatePage = function () {
-  function NavigatePage(pageRouter) {
-    _classCallCheck(this, NavigatePage);
-
-    this.router = pageRouter;
-    this.baseUrl = "";
-    this.modals = Array.from(document.querySelectorAll('.modal'));
-    this.menus = Array.from(document.querySelectorAll('.route'));;
-    this.currentPath = location.pathname;
-    this.currentHash = location.hash;
-    this.errorHash = 'error404';
-    this.events();
-  }
-
-  _createClass(NavigatePage, [{
-    key: 'events',
-    value: function events() {
-      var _this = this;
-
-      this.showMenus();
-
-      var validPath = this.router.routes.filter(function (r) {
-        return '' + _this.baseUrl + r.path === _this.currentPath;
-      })[0];
-
-      var validHash = this.router.routes.filter(function (r) {
-        return r.hash === _this.currentHash;
-      })[0];
-
-      if (validPath) {
-        if (validHash) {
-          if (validHash.name !== "root") {
-            this.openPage(validHash.name);
-            return validHash.name;
-          } else {
-            this.hideAllModuls();
-          }
-        } else {
-          this.openPage(this.errorHash);
-        }
-      } else {
-        this.hideMenus();
-        this.openPage(this.errorHash);
-      }
-    }
-  }, {
-    key: 'openPage',
-    value: function openPage(modalHash) {
-      this.hideAllModuls();
-
-      var validModal = this.modals.find(function (m) {
-        return m.attributes[0].value === modalHash;
-      });
-
-      validModal.classList.add('modal--is-visible');
-    }
-  }, {
-    key: 'hideAllModuls',
-    value: function hideAllModuls() {
-      this.modals.forEach(function (modal) {
-        return modal.classList.remove('modal--is-visible');
-      });
-    }
-  }, {
-    key: 'showMenus',
-    value: function showMenus() {
-      this.menus.forEach(function (m) {
-        return m.style.display = 'block';
-      });
-    }
-  }, {
-    key: 'hideMenus',
-    value: function hideMenus() {
-      this.menus.forEach(function (m) {
-        return m.style.display = 'none';
-      });
-    }
-  }]);
-
-  return NavigatePage;
-}();
-
-exports.default = NavigatePage;
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Router = function Router() {
-  _classCallCheck(this, Router);
-
-  this.name = 'pageRouter';
-  this.routes = [{
-    hash: '',
-    name: 'root',
-    path: '/'
-  }, {
-    hash: '#films',
-    name: 'films',
-    path: '/#films'
-  }, {
-    hash: '#people',
-    name: 'people',
-    path: '/#people'
-  }, {
-    hash: '#starships',
-    name: 'starships',
-    path: '/#starships'
-  }, {
-    hash: '#species',
-    name: 'species',
-    path: '/#species'
-  }, {
-    hash: '#planets',
-    name: 'planets',
-    path: '/#planets'
-  }, {
-    hash: '#vehicles',
-    name: 'vehicles',
-    path: '/#vehicles'
-  }];
-};
-
-exports.default = Router;
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _Router = __webpack_require__(3);
-
-var _Router2 = _interopRequireDefault(_Router);
-
-var _NavigatePage = __webpack_require__(2);
-
-var _NavigatePage2 = _interopRequireDefault(_NavigatePage);
-
-var _HomeButton = __webpack_require__(1);
-
-var _HomeButton2 = _interopRequireDefault(_HomeButton);
-
-var _GetLocalData = __webpack_require__(0);
-
-var _GetLocalData2 = _interopRequireDefault(_GetLocalData);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 var isFetching = false;
+var baseUrl = "";
 var fetchBaseUrl = 'http://swapi.co/api/';
-var pageRouter = new _Router2.default();
-var homeButton = new _HomeButton2.default();
-var nextPages = JSON.parse(sessionStorage.getItem('nextPages')) || {
-  films: fetchBaseUrl + 'films/',
-  people: fetchBaseUrl + 'people/',
-  species: fetchBaseUrl + 'species/',
-  planets: fetchBaseUrl + 'planets/',
-  starships: fetchBaseUrl + 'starships/',
-  vehicles: fetchBaseUrl + 'vehicles/'
-};
+var router = [{ path: "/", name: "" }, { path: "/", name: "films" }, { path: "/", name: "people" }, { path: "/", name: "species" }, { path: "/", name: "planets" }, { path: "/", name: "starships" }, { path: "/", name: "vehicles" }];
+var swapiSource = router.slice(1);
+var menus = Array.from(document.querySelectorAll('.route'));
+var modals = Array.from(document.querySelectorAll('.modal'));
+var homeBtn = document.querySelector('[name=route]');
+var nextPages = JSON.parse(sessionStorage.getItem('nextPages')) || {};
 
-sessionStorage.setItem('nextPages', JSON.stringify(nextPages));
+var initialLoad = function initialLoad() {
+  swapiSource.forEach(function (s) {
+    var urlToFetch = "http://swapi.co/api/" + s.name + "/";
+    var localData = JSON.parse(sessionStorage.getItem("" + s.name)) || [];
 
-function setInitialModulContent() {
-  var visibleModal = document.querySelector('.modal--is-visible');
-  if (!visibleModal) return;
-
-  var rowContent = visibleModal.querySelector(".row");
-
-  if (rowContent.innerHTML === "") {
-    console.log('modul has no content');
-    var toFetch = rowContent.dataset.page;
-    console.log('page to fetch: ' + toFetch);
-
-    var dataToShow = JSON.parse(sessionStorage.getItem('' + toFetch)) || [];
-    console.log('local data for ' + toFetch + ' is:');
-    console.log(dataToShow);
-
-    if (dataToShow.length === 0) {
-      console.log('data not yet exist. the fetch method will start.');
-      // if local storage is empty, means this is the first time we fetched a data (fetching cannot be canceled, so if somehow while fetching, the user click another hash, then this fetch must put the result in the right modul and local Storage, because once user click another hash/url, the visible modul will be changed :( ..... AAARRRGHHHH!!!)
-      // fetch data
-      // set next page
-      // store data to local storage
-      // populate data with local storage
-
-      var urlToFetch = nextPages['' + toFetch];
-      console.log('urlToFetch: ' + urlToFetch);
-
-      isFetching = true;
-      console.log('isFetching = ' + isFetching);
-
+    if (localData.length === 0) {
       fetch(urlToFetch).then(function (blob) {
         return blob.json();
       }).then(function (data) {
-        // console.log(data);
-
-        nextPages['' + toFetch] = data.next;
+        // console.log(`from fetch...`);
+        nextPages["" + s.name] = data.next;
+        localData.push.apply(localData, _toConsumableArray(data.results));
         sessionStorage.setItem('nextPages', JSON.stringify(nextPages));
-
-        dataToShow.push.apply(dataToShow, _toConsumableArray(data.results));
-        sessionStorage.setItem('' + toFetch, JSON.stringify(dataToShow));
-
-        console.log('now we can insert a content to the modul');
-        showData(toFetch);
-
-        isFetching = false;
-        console.log('isFetching = ' + isFetching);
-
-        // setNextPage(pageToFetch, data.next);
-        // tempResults.length = 0;
-        // tempResults.push(...data.results);
-        // insertData();
+        sessionStorage.setItem("" + s.name, JSON.stringify(localData));
+        populateAllContent(s.name);
       }).catch(function (error) {
         console.log('There has been a problem with your fetch operation: ' + error.message);
       });
     } else {
-      console.log('show data from local storage');
-      showData(toFetch);
+      // console.log(`from local...`);
+      populateAllContent(s.name);
     }
-  } else {
-    console.log('modul has content, there\'s nothing to do on the page. Use scroll to load more data.');
-  }
-}
+  });
+};
 
-function showData(toFetch) {
-  switch (toFetch) {
+var populateAllContent = function populateAllContent(modal) {
+  var localData = JSON.parse(sessionStorage.getItem("" + modal));
+  switch (modal) {
     case 'films':
-      showFilms();
+      populateFilms(localData);
       break;
     case 'people':
-      console.log('show people');
+      populatePeople(localData);
       break;
     case 'species':
-      console.log('show species');
+      populateSpecies(localData);
       break;
     case 'planets':
-      console.log('show planets');
+      populatePlanets(localData);
       break;
     case 'starships':
-      console.log('show starships');
+      populateStarships(localData);
       break;
     case 'vehicles':
-      console.log('show vehicles');
+      populateVehicles(localData);
       break;
   }
-}
+};
 
-function showFilms() {
-  var toInsert = document.querySelector('div[data-page=films');
-  console.log(toInsert);
-  var filmsData = JSON.parse(sessionStorage.getItem('films'));
-
-  var ordered = filmsData.sort(function (a, b) {
+var populateFilms = function populateFilms(data) {
+  // console.log(data);
+  var toInsert = document.querySelector("div[data-page=films");
+  var ordered = data.sort(function (a, b) {
     return a.release_date > b.release_date ? 1 : -1;
   });
-  // console.log(ordered);
 
-  toInsert.innerHTML = ordered.map(function (data, i) {
+  var toAppend = ordered.map(function (data, i) {
     var d = new Date(data.release_date);
     var newDate = d.toDateString();
     var shortDesc = data.opening_crawl.substr(0, 199);
-    return '\n    <div class="row__large-6">\n      <div class="modal__item">\n        <p><h4 class="item-top-title">EPISODE ' + data.episode_id + '</h4></p>\n        <p><h3 class="item-title">' + data.title + '</h3></p>\n        <p><span class="subtitle-yellow">Director:</span> ' + data.director + ' <span class="subtitle-yellow">Producer:</span> ' + data.producer + ' <span class="subtitle-yellow">Release Date:</span> ' + newDate + '</p>\n        <p><span class="item-description">' + shortDesc + '...<button class="item-extend-description">...more</button>\n        <p><span class="subtitle-yellow">In the film:<span></p>\n        <div class="item-details"><button>Characters</button> <button>Planets</button><button>Starships</button><button>Vehicles</button><button>Species</button></div>\n        </p>\n      </div>\n    </div>\n    ';
+    return "\n    <div class=\"row__large-6\">\n      <div class=\"modal__item\">\n        <p><h4 class=\"item-top-title\">EPISODE " + data.episode_id + "</h4></p>\n        <p><h3 class=\"item-title\">" + data.title + "</h3></p>\n        <p><span class=\"subtitle-yellow\">Director:</span> " + data.director + " <span class=\"subtitle-yellow\">Producer:</span> " + data.producer + " <span class=\"subtitle-yellow\">Release Date:</span> " + newDate + "</p>\n        <p><span class=\"item-description\">" + shortDesc + "...</p>\n        <p><button class=\"item-extend-description\">More Details...</button></p>\n      </div>\n    </div>\n    ";
   }).join('');
-}
 
-function animateModulItems(toFetch) {
-  var modalItems = Array.from(document.querySelector('div[data-page=' + toFetch + ']').querySelectorAll('.modal__item'));
+  toInsert.innerHTML = toInsert.innerHTML + toAppend;
+};
 
-  console.log(modalItems);
+// <p><span class="subtitle-yellow">In the film:<span></p>
+// <div class="item-details"><button>Characters</button> <button>Planets</button><button>Starships</button><button>Vehicles</button><button>Species</button></div>
+// </p>
 
-  modalItems.forEach(function (item) {
-    return item.classList.add('modal__item--inserted');
+// FOR PEOPLE DETAILS
+// const dataFilms = JSON.parse(sessionStorage.getItem(`films`));
+// console.log(dataFilms);
+// 
+//   const filmsList = d.films.map(film => {
+//     const dataFilm = dataFilms.filter( df => {
+//       return film === df.url;
+//     })[0];
+//     return `${dataFilm.title}`;
+//   }).join(', ');
+
+var populatePeople = function populatePeople(data) {
+  // console.log(data);
+  var toInsert = document.querySelector("div[data-page=people");
+
+  var toAppend = data.map(function (d, i) {
+    return "\n    <div class=\"row__large-4\">\n      <div class=\"modal__item\">\n        <p><h4 class=\"item-top-title\">" + d.name + "</h4></p>\n        <p>\n          <span class=\"subtitle-yellow\">Birth Year:</span> " + d.birth_year + "<br />\n          <span class=\"subtitle-yellow\">Gender:</span> " + d.gender + "<br />\n          <span class=\"subtitle-yellow\">Height:</span> " + d.height + " <span class=\"subtitle-yellow\">Mass:</span> " + d.mass + "<br />\n          <span class=\"subtitle-yellow\">Eye Color:</span> " + d.eye_color + " <span class=\"subtitle-yellow\">Hair Color:</span> " + d.hair_color + "<br />\n          <span class=\"subtitle-yellow\">Skin Color:</span> " + d.skin_color + "\n        </p>\n        <p><button class=\"item-extend-description\">More Details..</button></p>\n      </div>\n    </div>\n    ";
+  }).join('');
+
+  toInsert.innerHTML = toInsert.innerHTML + toAppend;
+};
+
+var populateSpecies = function populateSpecies(data) {
+  // console.log(data);
+  var toInsert = document.querySelector("div[data-page=species");
+
+  var toAppend = data.map(function (d, i) {
+    return "\n    <div class=\"row__large-4\">\n      <div class=\"modal__item\">\n        <p><h4 class=\"item-top-title\">" + d.name + "</h4></p>\n        <p>\n          <span class=\"subtitle-yellow\">Language:</span> " + d.language + "<br />\n          <span class=\"subtitle-yellow\">Classification:</span> " + d.classification + "<br />\n          <span class=\"subtitle-yellow\">Designation:</span> " + d.designation + "<br />\n          <span class=\"subtitle-yellow\">Avg Height:</span> " + d.average_height + "<br />\n          <span class=\"subtitle-yellow\">Avg Lifespan:</span> " + d.average_lifespan + "<br />\n          <span class=\"subtitle-yellow\">Eye Colors:</span> " + d.eye_colors + "<br />\n          <span class=\"subtitle-yellow\">Hair Colors:</span> " + d.hair_colors + "<br />\n          <span class=\"subtitle-yellow\">Skin Colors:</span> " + d.skin_colors + "\n        </p>\n        <p><button class=\"item-extend-description\">More Details...</button></p>\n      </div>\n    </div>\n    ";
+  }).join('');
+
+  toInsert.innerHTML = toInsert.innerHTML + toAppend;
+};
+
+var populatePlanets = function populatePlanets(data) {
+  // console.log(data);
+  var toInsert = document.querySelector("div[data-page=planets");
+
+  var toAppend = data.map(function (d, i) {
+    return "\n    <div class=\"row__large-4\">\n      <div class=\"modal__item\">\n        <p><h4 class=\"item-top-title\">" + d.name + "</h4></p>\n        <p>\n          <span class=\"subtitle-yellow\">Diameter:</span> " + d.diameter + "<br />\n          <span class=\"subtitle-yellow\">Orbital Period:</span> " + d.orbital_period + "<br />\n          <span class=\"subtitle-yellow\">Rotation Period:</span> " + d.rotation_period + "<br />\n          <span class=\"subtitle-yellow\">Surface Water:</span> " + d.surface_water + "<br />\n          <span class=\"subtitle-yellow\">Terrain:</span> " + d.terrain + "<br />\n          <span class=\"subtitle-yellow\">Climate:</span> " + d.climate + "<br />\n          <span class=\"subtitle-yellow\">Gravity:</span> " + d.gravity + "<br />\n          <span class=\"subtitle-yellow\">Population:</span> " + numberWithCommas(d.population) + "<br />\n        </p>\n        <p><button class=\"item-extend-description\">More Details...</button></p>\n      </div>\n    </div>\n    ";
+  }).join('');
+
+  toInsert.innerHTML = toInsert.innerHTML + toAppend;
+};
+
+var populateStarships = function populateStarships(data) {
+  // console.log(data);
+  var toInsert = document.querySelector("div[data-page=starships");
+
+  var toAppend = data.map(function (d, i) {
+    return "\n    <div class=\"row__large-4\">\n      <div class=\"modal__item\">\n        <p><h4 class=\"item-top-title\">" + d.name + "</h4></p>\n        <p>\n          <span class=\"subtitle-yellow\">Model:</span> " + d.model + "<br />\n          <span class=\"subtitle-yellow\">Starship Class:</span> " + d.starship_class + "<br />\n          <span class=\"subtitle-yellow\">Length:</span> " + numberWithCommas(d.length) + "<br />\n          <span class=\"subtitle-yellow\">MGLT:</span> " + d.mglt + "<br />\n          <span class=\"subtitle-yellow\">Hyperdrive Rating:</span> " + d.hyperdrive_rating + "<br />\n          <span class=\"subtitle-yellow\">Max. Atmosphering Speed:</span> " + d.max_atmosphering_speed + "<br />\n          <span class=\"subtitle-yellow\">Manufacturer:</span> " + d.manufacturer + "<br />\n          <span class=\"subtitle-yellow\">Crew:</span> " + numberWithCommas(d.crew) + "<br />\n          <span class=\"subtitle-yellow\">Passengers:</span> " + numberWithCommas(d.passengers) + "<br />\n          <span class=\"subtitle-yellow\">Cargo Capacity:</span> " + numberWithCommas(d.cargo_capacity) + "<br />\n          <span class=\"subtitle-yellow\">Consumables:</span> " + d.consumables + "<br />\n          <span class=\"subtitle-yellow\">Cost (in credits):</span> " + numberWithCommas(d.cost_in_credits) + "\n        </p>\n        <p><button class=\"item-extend-description\">More Details...</button></p>\n      </div>\n    </div>\n    ";
+  }).join('');
+
+  toInsert.innerHTML = toInsert.innerHTML + toAppend;
+};
+
+var populateVehicles = function populateVehicles(data) {
+  // console.log(data);
+  var toInsert = document.querySelector("div[data-page=vehicles");
+
+  var toAppend = data.map(function (d, i) {
+    return "\n    <div class=\"row__large-4\">\n      <div class=\"modal__item\">\n        <p><h4 class=\"item-top-title\">" + d.name + "</h4></p>\n        <p>\n          <span class=\"subtitle-yellow\">Model:</span> " + d.model + "<br />\n          <span class=\"subtitle-yellow\">Vehicle Class:</span> " + d.vehicle_class + "<br />\n          <span class=\"subtitle-yellow\">Length:</span> " + numberWithCommas(d.length) + "<br />\n          <span class=\"subtitle-yellow\">Max. Atmosphering Speed:</span> " + d.max_atmosphering_speed + "<br />\n          <span class=\"subtitle-yellow\">Manufacturer:</span> " + d.manufacturer + "<br />\n          <span class=\"subtitle-yellow\">Crew:</span> " + numberWithCommas(d.crew) + "<br />\n          <span class=\"subtitle-yellow\">Passengers:</span> " + numberWithCommas(d.passengers) + "<br />\n          <span class=\"subtitle-yellow\">Cargo Capacity:</span> " + numberWithCommas(d.cargo_capacity) + "<br />\n          <span class=\"subtitle-yellow\">Consumables:</span> " + d.consumables + "<br />\n          <span class=\"subtitle-yellow\">Cost (in credits):</span> " + numberWithCommas(d.cost_in_credits) + "\n        </p>\n        <p><button class=\"item-extend-description\">More Details...</button></p>\n      </div>\n    </div>\n    ";
+  }).join('');
+
+  toInsert.innerHTML = toInsert.innerHTML + toAppend;
+};
+
+var numberWithCommas = function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
+
+var clearLargeNav = function clearLargeNav() {
+  // console.log(`clear large Nav`);
+  homeBtn.classList.remove('larger');
+  menus.forEach(function (m) {
+    return m.classList.remove('larger');
   });
+};
+
+var largeNav = function largeNav(nav) {
+  // console.log(`add large Nav to "${nav.innerHTML}"`);
+  nav.classList.add('larger');
+};
+
+function loadPage() {
+  var currentPath = location.pathname;
+  var currentHash = location.hash;
+  var pageToLoad = currentHash.substr(1);
+
+  var validUrl = router.filter(function (r) {
+    return r.path === currentPath && r.name === pageToLoad;
+  })[0];
+
+  var currentMenu = document.querySelector("a[href='" + currentHash + "']");
+
+  if (validUrl) {
+    if (validUrl.name === "") {
+      clearLargeNav();
+      largeNav(homeBtn);
+      hideAllModals();
+    } else {
+      clearLargeNav();
+      showMenu();
+      largeNav(currentMenu);
+      hideAllModals();
+      showModal(validUrl.name);
+    }
+  } else {
+    hideMenu();
+    hideAllModals();
+    showModal('error404');
+  }
 }
 
-// const tempResults = [];
-//
-// function setNextPages() {
-//   const validHash = pageRouter.routes.filter(r => {
-//     return r.hash === location.hash;
-//   })[0];
-//
-//   if(validHash) {
-//     if(validHash.name !== "root") {
-//       const pageToFetch = validHash.name;
-//
-//       //load all pages until the nextPage is null
-//
-//       const endpoint = `http://swapi.co/api/${pageToFetch}/`;
-//
-//       fetch(endpoint)
-//       .then(blob => blob.json())
-//       .then(data => {
-//         setNextPage(pageToFetch, data.next);
-//         tempResults.length = 0;
-//         tempResults.push(...data.results);
-//         insertData();
-//       });
-//     }
-//   }
-// }
-//
-// function setNextPage(pageToFetch, pageUrl) {
-//   nextPages[`${pageToFetch}`] = pageUrl;
-//   localStorage.setItem('nextPages', JSON.stringify(nextPages));
-// }
-//
-// function insertData() {
-//   console.log(tempResults);
-//   tempResults.forEach(r => console.log("hi"));
-// }
+var hideMenu = function hideMenu() {
+  // console.log(`hide menu`);
+  menus.forEach(function (m) {
+    return m.style.display = 'none';
+  });
+};
 
+var showMenu = function showMenu() {
+  // console.log(`show menu`);
+  menus.forEach(function (m) {
+    return m.style.display = 'block';
+  });
+};
+
+var hideAllModals = function hideAllModals() {
+  // console.log(`hide all modals`);
+  modals.forEach(function (m) {
+    return m.classList.remove('modal--is-visible');
+  });
+};
+
+var showModal = function showModal(modal) {
+  // console.log(`show modal`);
+  var modalToOpen = modals.find(function (m) {
+    return m.id === modal;
+  });
+  modalToOpen.classList.add('modal--is-visible');
+};
+
+initialLoad();
 window.addEventListener('load', loadPage);
 window.onpopstate = loadPage;
 
-function loadPage() {
-  var pageToLoad = new _NavigatePage2.default(pageRouter);
-  setInitialModulContent();
-  setLoadOnScroll();
-}
-
-window.addEventListener('scroll', debounce(checkBottom));
-
-function setLoadOnScroll() {
-  var visibleModal = document.querySelector('.modal--is-visible');
-  if (visibleModal) {
-    visibleModal.addEventListener('scroll', debounce(checkBottom));
-  }
-}
-
-function debounce(func) {
-  var wait = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
-  var immediate = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-
-  var timeout;
-  return function () {
-    var context = this,
-        args = arguments;
-    var later = function later() {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    };
-    var callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
-  };
-};
-
-function checkBottom(e) {
-  // console.log(e.target.id);
-  var modulBottom = e.target.scrollTop + e.target.offsetHeight;
-  if (modulBottom >= e.target.scrollHeight) {
-    console.log("bottom reached");
-    // if isLoading is true, then do nothing (as the current fetch event is still occuring)
-    if (isFetching === false) {
-      // if nextPage is not null: fetch new data.
-      var nextPage = nextPages['' + e.target.id];
-      if (nextPage !== null) {
-        isFetching = true; // while fetching data, we pause every event on when the bottom of the page reached if user plays with the scrolling.
-        console.log('fetching data...');
-        // fetch data
-        // set next page
-        // store data to local storage
-        // populate data with local storage
-      }
-    }
-  }
-}
+homeBtn.addEventListener('click', function () {
+  window.history.pushState({}, "name", "/" + baseUrl);
+  showMenu();
+  clearLargeNav();
+  largeNav(homeBtn);
+  hideAllModals();
+});
 
 /***/ })
 /******/ ]);

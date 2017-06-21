@@ -3,7 +3,7 @@ class NavigatePage {
     this.router = pageRouter;
     this.baseUrl   = "";
     this.modals = Array.from(document.querySelectorAll('.modal'));
-    this.menus  = Array.from(document.querySelectorAll('.route'));;
+    this.menus  = Array.from(document.querySelectorAll('.route'));
     this.currentPath = location.pathname;
     this.currentHash = location.hash;
     this.errorHash = 'error404';
@@ -25,7 +25,6 @@ class NavigatePage {
       if(validHash) {
         if(validHash.name !== "root") {
           this.openPage(validHash.name);
-          return validHash.name;
         } else {
           this.hideAllModuls();
         }

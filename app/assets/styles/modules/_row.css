@@ -24,4 +24,9 @@
     float: left;
     width: 50%;
   }
+
+  &__large-12 {
+    float: left;
+    width: 100%;
+  }
 }

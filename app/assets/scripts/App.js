@@ -1,118 +1,77 @@
-import Router from './modules/Router';
-import NavigatePage from './modules/NavigatePage';
-import HomeButton from './modules/HomeButton';
-import GetLocalData from './modules/GetLocalData';
-
 let isFetching = false;
+const baseUrl = "";
 const fetchBaseUrl = 'http://swapi.co/api/';
-const pageRouter = new Router();
-const homeButton = new HomeButton();
-const nextPages = JSON.parse(sessionStorage.getItem('nextPages')) || {
-  films: `${fetchBaseUrl}films/`,
-  people: `${fetchBaseUrl}people/`,
-  species: `${fetchBaseUrl}species/`,
-  planets: `${fetchBaseUrl}planets/`,
-  starships: `${fetchBaseUrl}starships/`,
-  vehicles: `${fetchBaseUrl}vehicles/`
-};
+const router = [
+  { path: "/", name: ""},
+  { path: "/", name: "films"},
+  { path: "/", name: "people"},
+  { path: "/", name: "species"},
+  { path: "/", name: "planets"},
+  { path: "/", name: "starships"},
+  { path: "/", name: "vehicles"}
+];
+const swapiSource = router.slice(1);
+const menus = Array.from(document.querySelectorAll('.route'));
+const modals = Array.from(document.querySelectorAll('.modal'));
+const homeBtn = document.querySelector('[name=route]');
+const nextPages = JSON.parse(sessionStorage.getItem('nextPages')) || {};
 
-sessionStorage.setItem('nextPages', JSON.stringify(nextPages));
+const initialLoad = () => {
+  swapiSource.forEach(s => {
+    const urlToFetch = `http://swapi.co/api/${s.name}/`;
+    const localData = JSON.parse(sessionStorage.getItem(`${s.name}`)) || [];
 
-function setInitialModulContent() {
-  const visibleModal = document.querySelector('.modal--is-visible');
-  if(!visibleModal) return;
-
-  const rowContent = visibleModal.querySelector(".row");
-
-  if(rowContent.innerHTML === "") {
-    console.log(`modul has no content`);
-    const toFetch = rowContent.dataset.page;
-    console.log(`page to fetch: ${toFetch}`);
-
-    const dataToShow = JSON.parse(sessionStorage.getItem(`${toFetch}`)) || [];
-    console.log(`local data for ${toFetch} is:`);
-    console.log(dataToShow);
-
-    if(dataToShow.length === 0) {
-      console.log(`data not yet exist. the fetch method will start.`);
-      // if local storage is empty, means this is the first time we fetched a data (fetching cannot be canceled, so if somehow while fetching, the user click another hash, then this fetch must put the result in the right modul and local Storage, because once user click another hash/url, the visible modul will be changed :( ..... AAARRRGHHHH!!!)
-      // fetch data
-      // set next page
-      // store data to local storage
-      // populate data with local storage
-
-      const urlToFetch = nextPages[`${toFetch}`];
-      console.log(`urlToFetch: ${urlToFetch}`);
-
-      isFetching = true;
-      console.log(`isFetching = ${isFetching}`);
-
+    if(localData.length === 0) {
       fetch(urlToFetch)
       .then(blob => blob.json())
       .then(data => {
-        // console.log(data);
-
-        nextPages[`${toFetch}`] = data.next;
+        // console.log(`from fetch...`);
+        nextPages[`${s.name}`] = data.next;
+        localData.push(...data.results);
         sessionStorage.setItem('nextPages', JSON.stringify(nextPages));
-
-        dataToShow.push(...data.results);
-        sessionStorage.setItem(`${toFetch}`, JSON.stringify(dataToShow));
-
-        console.log(`now we can insert a content to the modul`);
-        showData(toFetch);
-
-        isFetching = false;
-        console.log(`isFetching = ${isFetching}`);
-
-        // setNextPage(pageToFetch, data.next);
-        // tempResults.length = 0;
-        // tempResults.push(...data.results);
-        // insertData();
+        sessionStorage.setItem(`${s.name}`, JSON.stringify(localData));
+        populateAllContent(s.name);
       })
       .catch(function(error) {
         console.log('There has been a problem with your fetch operation: ' + error.message);
       });
     } else {
-      console.log(`show data from local storage`);
-      showData(toFetch);
+      // console.log(`from local...`);
+      populateAllContent(s.name);
     }
-  } else {
-    console.log(`modul has content, there's nothing to do on the page. Use scroll to load more data.`);
-  }
+  });
 }
 
-function showData(toFetch) {
-  switch(toFetch) {
+const populateAllContent = (modal) => {
+  const localData = JSON.parse(sessionStorage.getItem(`${modal}`));
+  switch(modal) {
     case 'films':
-      showFilms();
+      populateFilms(localData);
       break;
     case 'people':
-      console.log(`show people`);
+      populatePeople(localData);
       break;
     case 'species':
-      console.log(`show species`);
+      populateSpecies(localData);
       break;
     case 'planets':
-      console.log(`show planets`);
+      populatePlanets(localData);
       break;
     case 'starships':
-      console.log(`show starships`);
+      populateStarships(localData);
       break;
     case 'vehicles':
-      console.log(`show vehicles`);
+      populateVehicles(localData);
       break;
   }
-}
+};
 
-function showFilms() {
+const populateFilms = (data) => {
+  // console.log(data);
   const toInsert = document.querySelector(`div[data-page=films`);
-  console.log(toInsert);
-  const filmsData = JSON.parse(sessionStorage.getItem('films'));
+  const ordered = data.sort((a, b) => (a.release_date > b.release_date ? 1 : -1));
 
-  const ordered = filmsData.sort((a, b) => (a.release_date > b.release_date ? 1 : -1));
-  // console.log(ordered);
-
-  toInsert.innerHTML = ordered.map((data, i) => {
+  const toAppend = ordered.map((data, i) => {
     const d = new Date(data.release_date);
     const newDate = d.toDateString();
     const shortDesc = data.opening_crawl.substr(0,199);
@@ -122,112 +81,248 @@ function showFilms() {
         <p><h4 class="item-top-title">EPISODE ${data.episode_id}</h4></p>
         <p><h3 class="item-title">${data.title}</h3></p>
         <p><span class="subtitle-yellow">Director:</span> ${data.director} <span class="subtitle-yellow">Producer:</span> ${data.producer} <span class="subtitle-yellow">Release Date:</span> ${newDate}</p>
-        <p><span class="item-description">${shortDesc}...<button class="item-extend-description">...more</button>
-        <p><span class="subtitle-yellow">In the film:<span></p>
-        <div class="item-details"><button>Characters</button> <button>Planets</button><button>Starships</button><button>Vehicles</button><button>Species</button></div>
-        </p>
+        <p><span class="item-description">${shortDesc}...</p>
+        <p><button class="item-extend-description">More Details...</button></p>
       </div>
     </div>
     `;
   }).join('');
+
+  toInsert.innerHTML = toInsert.innerHTML + toAppend;
 }
 
-function animateModulItems(toFetch) {
-  const modalItems = Array.from(document.querySelector(`div[data-page=${toFetch}]`).querySelectorAll('.modal__item'));
+// <p><span class="subtitle-yellow">In the film:<span></p>
+// <div class="item-details"><button>Characters</button> <button>Planets</button><button>Starships</button><button>Vehicles</button><button>Species</button></div>
+// </p>
 
-  console.log(modalItems);
+// FOR PEOPLE DETAILS
+// const dataFilms = JSON.parse(sessionStorage.getItem(`films`));
+// console.log(dataFilms);
+// 
+//   const filmsList = d.films.map(film => {
+//     const dataFilm = dataFilms.filter( df => {
+//       return film === df.url;
+//     })[0];
+//     return `${dataFilm.title}`;
+//   }).join(', ');
 
-  modalItems.forEach(item => item.classList.add('modal__item--inserted'));
+const populatePeople = (data) => {
+  // console.log(data);
+  const toInsert = document.querySelector(`div[data-page=people`);
+
+  const toAppend = data.map((d, i) => {
+    return `
+    <div class="row__large-4">
+      <div class="modal__item">
+        <p><h4 class="item-top-title">${d.name}</h4></p>
+        <p>
+          <span class="subtitle-yellow">Birth Year:</span> ${d.birth_year}<br />
+          <span class="subtitle-yellow">Gender:</span> ${d.gender}<br />
+          <span class="subtitle-yellow">Height:</span> ${d.height} <span class="subtitle-yellow">Mass:</span> ${d.mass}<br />
+          <span class="subtitle-yellow">Eye Color:</span> ${d.eye_color} <span class="subtitle-yellow">Hair Color:</span> ${d.hair_color}<br />
+          <span class="subtitle-yellow">Skin Color:</span> ${d.skin_color}
+        </p>
+        <p><button class="item-extend-description">More Details..</button></p>
+      </div>
+    </div>
+    `;
+  }).join('');
+
+  toInsert.innerHTML = toInsert.innerHTML + toAppend;
 }
 
+const populateSpecies = (data) => {
+  // console.log(data);
+  const toInsert = document.querySelector(`div[data-page=species`);
 
-// const tempResults = [];
-//
-// function setNextPages() {
-//   const validHash = pageRouter.routes.filter(r => {
-//     return r.hash === location.hash;
-//   })[0];
-//
-//   if(validHash) {
-//     if(validHash.name !== "root") {
-//       const pageToFetch = validHash.name;
-//
-//       //load all pages until the nextPage is null
-//
-//       const endpoint = `http://swapi.co/api/${pageToFetch}/`;
-//
-//       fetch(endpoint)
-//       .then(blob => blob.json())
-//       .then(data => {
-//         setNextPage(pageToFetch, data.next);
-//         tempResults.length = 0;
-//         tempResults.push(...data.results);
-//         insertData();
-//       });
-//     }
-//   }
-// }
-//
-// function setNextPage(pageToFetch, pageUrl) {
-//   nextPages[`${pageToFetch}`] = pageUrl;
-//   localStorage.setItem('nextPages', JSON.stringify(nextPages));
-// }
-//
-// function insertData() {
-//   console.log(tempResults);
-//   tempResults.forEach(r => console.log("hi"));
-// }
+  const toAppend = data.map((d, i) => {
+    return `
+    <div class="row__large-4">
+      <div class="modal__item">
+        <p><h4 class="item-top-title">${d.name}</h4></p>
+        <p>
+          <span class="subtitle-yellow">Language:</span> ${d.language}<br />
+          <span class="subtitle-yellow">Classification:</span> ${d.classification}<br />
+          <span class="subtitle-yellow">Designation:</span> ${d.designation}<br />
+          <span class="subtitle-yellow">Avg Height:</span> ${d.average_height}<br />
+          <span class="subtitle-yellow">Avg Lifespan:</span> ${d.average_lifespan}<br />
+          <span class="subtitle-yellow">Eye Colors:</span> ${d.eye_colors}<br />
+          <span class="subtitle-yellow">Hair Colors:</span> ${d.hair_colors}<br />
+          <span class="subtitle-yellow">Skin Colors:</span> ${d.skin_colors}
+        </p>
+        <p><button class="item-extend-description">More Details...</button></p>
+      </div>
+    </div>
+    `;
+  }).join('');
 
+  toInsert.innerHTML = toInsert.innerHTML + toAppend;
+}
+
+const populatePlanets = (data) => {
+  // console.log(data);
+  const toInsert = document.querySelector(`div[data-page=planets`);
+
+  const toAppend = data.map((d, i) => {
+    return `
+    <div class="row__large-4">
+      <div class="modal__item">
+        <p><h4 class="item-top-title">${d.name}</h4></p>
+        <p>
+          <span class="subtitle-yellow">Diameter:</span> ${d.diameter}<br />
+          <span class="subtitle-yellow">Orbital Period:</span> ${d.orbital_period}<br />
+          <span class="subtitle-yellow">Rotation Period:</span> ${d.rotation_period}<br />
+          <span class="subtitle-yellow">Surface Water:</span> ${d.surface_water}<br />
+          <span class="subtitle-yellow">Terrain:</span> ${d.terrain}<br />
+          <span class="subtitle-yellow">Climate:</span> ${d.climate}<br />
+          <span class="subtitle-yellow">Gravity:</span> ${d.gravity}<br />
+          <span class="subtitle-yellow">Population:</span> ${numberWithCommas(d.population)}<br />
+        </p>
+        <p><button class="item-extend-description">More Details...</button></p>
+      </div>
+    </div>
+    `;
+  }).join('');
+
+  toInsert.innerHTML = toInsert.innerHTML + toAppend;
+}
+
+const populateStarships = (data) => {
+  // console.log(data);
+  const toInsert = document.querySelector(`div[data-page=starships`);
+
+  const toAppend = data.map((d, i) => {
+    return `
+    <div class="row__large-4">
+      <div class="modal__item">
+        <p><h4 class="item-top-title">${d.name}</h4></p>
+        <p>
+          <span class="subtitle-yellow">Model:</span> ${d.model}<br />
+          <span class="subtitle-yellow">Starship Class:</span> ${d.starship_class}<br />
+          <span class="subtitle-yellow">Length:</span> ${numberWithCommas(d.length)}<br />
+          <span class="subtitle-yellow">MGLT:</span> ${d.mglt}<br />
+          <span class="subtitle-yellow">Hyperdrive Rating:</span> ${d.hyperdrive_rating}<br />
+          <span class="subtitle-yellow">Max. Atmosphering Speed:</span> ${d.max_atmosphering_speed}<br />
+          <span class="subtitle-yellow">Manufacturer:</span> ${d.manufacturer}<br />
+          <span class="subtitle-yellow">Crew:</span> ${numberWithCommas(d.crew)}<br />
+          <span class="subtitle-yellow">Passengers:</span> ${numberWithCommas(d.passengers)}<br />
+          <span class="subtitle-yellow">Cargo Capacity:</span> ${numberWithCommas(d.cargo_capacity)}<br />
+          <span class="subtitle-yellow">Consumables:</span> ${d.consumables}<br />
+          <span class="subtitle-yellow">Cost (in credits):</span> ${numberWithCommas(d.cost_in_credits)}
+        </p>
+        <p><button class="item-extend-description">More Details...</button></p>
+      </div>
+    </div>
+    `;
+  }).join('');
+
+  toInsert.innerHTML = toInsert.innerHTML + toAppend;
+}
+
+const populateVehicles = (data) => {
+  // console.log(data);
+  const toInsert = document.querySelector(`div[data-page=vehicles`);
+
+  const toAppend = data.map((d, i) => {
+    return `
+    <div class="row__large-4">
+      <div class="modal__item">
+        <p><h4 class="item-top-title">${d.name}</h4></p>
+        <p>
+          <span class="subtitle-yellow">Model:</span> ${d.model}<br />
+          <span class="subtitle-yellow">Vehicle Class:</span> ${d.vehicle_class}<br />
+          <span class="subtitle-yellow">Length:</span> ${numberWithCommas(d.length)}<br />
+          <span class="subtitle-yellow">Max. Atmosphering Speed:</span> ${d.max_atmosphering_speed}<br />
+          <span class="subtitle-yellow">Manufacturer:</span> ${d.manufacturer}<br />
+          <span class="subtitle-yellow">Crew:</span> ${numberWithCommas(d.crew)}<br />
+          <span class="subtitle-yellow">Passengers:</span> ${numberWithCommas(d.passengers)}<br />
+          <span class="subtitle-yellow">Cargo Capacity:</span> ${numberWithCommas(d.cargo_capacity)}<br />
+          <span class="subtitle-yellow">Consumables:</span> ${d.consumables}<br />
+          <span class="subtitle-yellow">Cost (in credits):</span> ${numberWithCommas(d.cost_in_credits)}
+        </p>
+        <p><button class="item-extend-description">More Details...</button></p>
+      </div>
+    </div>
+    `;
+  }).join('');
+
+  toInsert.innerHTML = toInsert.innerHTML + toAppend;
+}
+
+const numberWithCommas = (x) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+const clearLargeNav = () => {
+  // console.log(`clear large Nav`);
+  homeBtn.classList.remove('larger');
+  menus.forEach(m => m.classList.remove('larger'));
+}
+
+const largeNav = (nav) => {
+  // console.log(`add large Nav to "${nav.innerHTML}"`);
+  nav.classList.add('larger');
+}
+
+function loadPage() {
+  const currentPath = location.pathname;
+  const currentHash = location.hash;
+  const pageToLoad = currentHash.substr(1);
+
+  const validUrl = router.filter(r => {
+    return r.path === currentPath && r.name === pageToLoad
+  })[0];
+
+  const currentMenu = document.querySelector(`a[href='${currentHash}']`);
+
+  if(validUrl) {
+    if(validUrl.name === "") {
+      clearLargeNav();
+      largeNav(homeBtn);
+      hideAllModals();
+    } else {
+      clearLargeNav();
+      showMenu();
+      largeNav(currentMenu);
+      hideAllModals();
+      showModal(validUrl.name);
+    }
+  } else {
+    hideMenu();
+    hideAllModals();
+    showModal('error404');
+  }
+}
+
+const hideMenu = () => {
+  // console.log(`hide menu`);
+  menus.forEach(m => m.style.display = 'none');
+}
+
+const showMenu = () => {
+  // console.log(`show menu`);
+  menus.forEach(m => m.style.display = 'block');
+}
+
+const hideAllModals = () => {
+  // console.log(`hide all modals`);
+  modals.forEach(m => m.classList.remove('modal--is-visible'));
+}
+
+const showModal = (modal) => {
+  // console.log(`show modal`);
+  const modalToOpen = modals.find(m => { return m.id === modal });
+  modalToOpen.classList.add('modal--is-visible');
+}
+
+initialLoad();
 window.addEventListener('load', loadPage);
 window.onpopstate = loadPage;
 
-function loadPage() {
-  const pageToLoad = new NavigatePage(pageRouter);
-  setInitialModulContent();
-  setLoadOnScroll();
-}
-
-window.addEventListener('scroll', debounce(checkBottom));
-
-function setLoadOnScroll() {
-  const visibleModal = document.querySelector('.modal--is-visible');
-  if(visibleModal) {
-    visibleModal.addEventListener('scroll', debounce(checkBottom));
-  }
-}
-
-function debounce(func, wait = 10, immediate = true) {
-      var timeout;
-      return function() {
-        var context = this, args = arguments;
-        var later = function() {
-          timeout = null;
-          if (!immediate) func.apply(context, args);
-        };
-        var callNow = immediate && !timeout;
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-        if (callNow) func.apply(context, args);
-      };
-    };
-
-function checkBottom(e) {
-  // console.log(e.target.id);
-  const modulBottom = e.target.scrollTop + e.target.offsetHeight;
-  if(modulBottom >= e.target.scrollHeight) {
-    console.log("bottom reached");
-    // if isLoading is true, then do nothing (as the current fetch event is still occuring)
-    if(isFetching === false) {
-      // if nextPage is not null: fetch new data.
-      const nextPage = nextPages[`${e.target.id}`];
-      if(nextPage !== null) {
-        isFetching = true; // while fetching data, we pause every event on when the bottom of the page reached if user plays with the scrolling.
-        console.log(`fetching data...`);
-        // fetch data
-        // set next page
-        // store data to local storage
-        // populate data with local storage
-      }
-    }
-  }
-}
+homeBtn.addEventListener('click', () => {
+  window.history.pushState({}, "name", `/${baseUrl}`);
+  showMenu();
+  clearLargeNav();
+  largeNav(homeBtn);
+  hideAllModals();
+});
