@@ -3,7 +3,7 @@
   opacity: 0;
   margin: auto;
   padding: auto;
-  top: 58px;
+  top: 57px;
   bottom: 0;
   left: 0;
   right: 0;
@@ -23,6 +23,16 @@
     text-align: center;
     margin: auto;
     top: 25%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+
+  &__home-page {
+    color: #fff;
+    position: absolute;
+    text-align: center;
+    margin: auto;
+    top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
   }
