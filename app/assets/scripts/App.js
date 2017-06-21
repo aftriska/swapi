@@ -1,4 +1,5 @@
 let isFetching = false;
+// use /swapi for baseUrl when building to production...
 const baseUrl = "";
 const fetchBaseUrl = 'http://swapi.co/api/';
 const router = [
@@ -98,7 +99,7 @@ const populateFilms = (data) => {
 // FOR PEOPLE DETAILS
 // const dataFilms = JSON.parse(sessionStorage.getItem(`films`));
 // console.log(dataFilms);
-// 
+//
 //   const filmsList = d.films.map(film => {
 //     const dataFilm = dataFilms.filter( df => {
 //       return film === df.url;
@@ -269,8 +270,10 @@ function loadPage() {
   const currentHash = location.hash;
   const pageToLoad = currentHash.substr(1);
 
+  console.log(currentPath);
+
   const validUrl = router.filter(r => {
-    return r.path === currentPath && r.name === pageToLoad
+    return `${baseUrl}${r.path}` === currentPath && r.name === pageToLoad
   })[0];
 
   const currentMenu = document.querySelector(`a[href='${currentHash}']`);
@@ -320,7 +323,7 @@ window.addEventListener('load', loadPage);
 window.onpopstate = loadPage;
 
 homeBtn.addEventListener('click', () => {
-  window.history.pushState({}, "name", `/${baseUrl}`);
+  window.history.pushState({}, "name", `${baseUrl}/`);
   showMenu();
   clearLargeNav();
   largeNav(homeBtn);

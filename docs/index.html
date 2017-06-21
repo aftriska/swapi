@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700' rel='stylesheet' type='text/css'>
     <title>Star Wars Directory with SWAPI</title>
-    <link rel="stylesheet" href="assets/styles/styles-6c5bbba268.css"/>
+    <link rel="stylesheet" href="assets/styles/styles-8b1e41aca8.css"/>
     <script>
       (function(){
         var redirect = sessionStorage.redirect;
@@ -25,7 +25,7 @@
         <div class="site-header__menu-content">
           <nav class="primary-nav primary-nav--pull-right">
             <ul>
-              <li><button name="route">HOME</button></li>
+              <li><button name="route" class="">HOME</button></li>
               <li><a href="#films" class="route">FILMS</a></li>
               <li><a href="#people" class="route">PEOPLE</a></li>
               <li><a href="#species" class="route">SPECIES</a></li>
@@ -40,45 +40,48 @@
 
     <div id="error404" class="modal">
       <div class="wrapper">
-        <p>404</p>
+        <div class="modal__error-page">
+          <p class="item-title">THIS PAGE IS NOT EXIST!</p>
+        </div>
       </div>
     </div>
+
     <div id="films" class="modal">
       <div class="wrapper">
-        <p>FILMS</p>
+        <div data-page="films" class="row generic-content"></div>
       </div>
     </div>
+
     <div id="people" class="modal">
       <div class="wrapper">
-        <p>PEOPLE</p>
+        <div data-page="people" class="row generic-content"></div>
       </div>
     </div>
+
     <div id="species" class="modal">
       <div class="wrapper">
-        <p>SPECIES</p>
+        <div data-page="species" class="row generic-content"></div>
       </div>
     </div>
+
     <div id="planets" class="modal">
       <div class="wrapper">
-        <p>PLANETS</p>
+        <div data-page="planets" class="row generic-content"></div>
       </div>
     </div>
+
     <div id="starships" class="modal">
       <div class="wrapper">
-        <p>STARSHIPS</p>
+        <div data-page="starships" class="row generic-content"></div>
       </div>
     </div>
+
     <div id="vehicles" class="modal">
       <div class="wrapper">
-        <p>VEHICLES</p>
+        <div data-page="vehicles" class="row generic-content"></div>
       </div>
     </div>
 
-    <!-- <div class="wrapper">
-      <div id="page-section" class="page-section">
-
-      </div>
-    </div> -->
-  <script src="assets/scripts/App-02fe2e21c9.js"></script>
+  <script src="assets/scripts/App-8eaceddc02.js"></script>
   </body>
 </html>

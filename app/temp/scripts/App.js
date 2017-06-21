@@ -76,7 +76,7 @@
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 var isFetching = false;
-var baseUrl = "";
+var baseUrl = "/swapi";
 var fetchBaseUrl = 'http://swapi.co/api/';
 var router = [{ path: "/", name: "" }, { path: "/", name: "films" }, { path: "/", name: "people" }, { path: "/", name: "species" }, { path: "/", name: "planets" }, { path: "/", name: "starships" }, { path: "/", name: "vehicles" }];
 var swapiSource = router.slice(1);
@@ -158,7 +158,7 @@ var populateFilms = function populateFilms(data) {
 // FOR PEOPLE DETAILS
 // const dataFilms = JSON.parse(sessionStorage.getItem(`films`));
 // console.log(dataFilms);
-// 
+//
 //   const filmsList = d.films.map(film => {
 //     const dataFilm = dataFilms.filter( df => {
 //       return film === df.url;
@@ -243,8 +243,10 @@ function loadPage() {
   var currentHash = location.hash;
   var pageToLoad = currentHash.substr(1);
 
+  console.log(currentPath);
+
   var validUrl = router.filter(function (r) {
-    return r.path === currentPath && r.name === pageToLoad;
+    return "" + baseUrl + r.path === currentPath && r.name === pageToLoad;
   })[0];
 
   var currentMenu = document.querySelector("a[href='" + currentHash + "']");
@@ -302,7 +304,7 @@ window.addEventListener('load', loadPage);
 window.onpopstate = loadPage;
 
 homeBtn.addEventListener('click', function () {
-  window.history.pushState({}, "name", "/" + baseUrl);
+  window.history.pushState({}, "name", baseUrl + "/");
   showMenu();
   clearLargeNav();
   largeNav(homeBtn);
