@@ -1,6 +1,6 @@
 let isFetching = false;
 // use /swapi for baseUrl when building to production...
-const baseUrl = "";
+const baseUrl = "/swapi";
 const router = [
   { path: "/", name: ""},
   { path: "/", name: "films"},

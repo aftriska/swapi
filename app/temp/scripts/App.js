@@ -77,7 +77,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 var isFetching = false;
 // use /swapi for baseUrl when building to production...
-var baseUrl = "";
+var baseUrl = "/swapi";
 var router = [{ path: "/", name: "" }, { path: "/", name: "films" }, { path: "/", name: "people" }, { path: "/", name: "species" }, { path: "/", name: "planets" }, { path: "/", name: "starships" }, { path: "/", name: "vehicles" }];
 var swapiSource = router.slice(1);
 var menus = Array.from(document.querySelectorAll('.route'));
