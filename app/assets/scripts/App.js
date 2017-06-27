@@ -1,5 +1,5 @@
 // use /swapi for baseUrl when building to production...
-const baseUrl = "/swapi";
+const baseUrl = "";
 const router = [
   { path: "/", name: ""},
   { path: "/", name: "films"},
@@ -24,11 +24,6 @@ const homeBtn = document.querySelector('[name=route]');
 const modalClose = document.querySelector('.modal__close');
 const spinner = document.querySelector('.spinner');
 const nextPages = JSON.parse(sessionStorage.getItem('nextPages')) || {};
-const myInit = {
-  method: 'GET',
-  mode: 'cors',
-  cache: 'default'
-};
 
 const showSpinner = () => {
   spinner.classList.add('spinner--is-visible');
@@ -311,7 +306,7 @@ const initialLoad = () => {
 
     if(localData.length === 0) {
       showSpinner();
-      fetch(urlToFetch, myInit)
+      fetch(urlToFetch)
       .then(blob => blob.json())
       .then(data => {
         nextPages[`${s.name}`] = data.next;
@@ -364,28 +359,13 @@ const loadPage = () => {
   }
 }
 
-// const debounce = (func, wait = 5, immediate = true) => {
-//   var timeout;
-//   return function() {
-//     var context = this, args = arguments;
-//     var later = function() {
-//       timeout = null;
-//       if (!immediate) func.apply(context, args);
-//     };
-//     var callNow = immediate && !timeout;
-//     clearTimeout(timeout);
-//     timeout = setTimeout(later, wait);
-//     if (callNow) func.apply(context, args);
-//   };
-// };
-
 const fetchNextPage = (toFetch) => {
   const nextPage = nextPages[`${toFetch}`];
   const localData = JSON.parse(sessionStorage.getItem(`${toFetch}`));
 
   if(nextPage !== null){
     showSpinner();
-    fetch(nextPage, myInit)
+    fetch(nextPage)
     .then(blob => blob.json())
     .then(data => {
       nextPages[`${toFetch}`] = data.next;
@@ -525,7 +505,7 @@ const populateDetail = (itemToShow, pageType) => {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(f, myInit)
+        fetch(f)
         .then(blob => blob.json())
         .then(data => {
           films.push(data);
@@ -558,7 +538,7 @@ const populateDetail = (itemToShow, pageType) => {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(c, myInit)
+        fetch(c)
         .then(blob => blob.json())
         .then(data => {
           people.push(data);
@@ -591,7 +571,7 @@ const populateDetail = (itemToShow, pageType) => {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(s, myInit)
+        fetch(s)
         .then(blob => blob.json())
         .then(data => {
           species.push(data);
@@ -624,7 +604,7 @@ const populateDetail = (itemToShow, pageType) => {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(p, myInit)
+        fetch(p)
         .then(blob => blob.json())
         .then(data => {
           planets.push(data);
@@ -657,7 +637,7 @@ const populateDetail = (itemToShow, pageType) => {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(s, myInit)
+        fetch(s)
         .then(blob => blob.json())
         .then(data => {
           starships.push(data);
@@ -686,16 +666,21 @@ const populateDetail = (itemToShow, pageType) => {
       });
 
       if(vehiclesDetail) {
-        detailVehicles.innerHTML += createDetailButton(vehiclesDetail.url, "vehicles", vehiclesDetail.name);
+        detailVehicles.innerHTML += createDetailButton(starshipsDetail.url, "starships", starshipsDetail.name);
+        detailVehicles.innerHTML += `
+          <button data-type="detailBtn" data-url="${vehiclesDetail.url}" data-source="vehicles" class="item-extend-description">${vehiclesDetail.name}</button>
+        `;
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(v, myInit)
+        fetch(v)
         .then(blob => blob.json())
         .then(data => {
           vehicles.push(data);
           sessionStorage.setItem(`vehicles`, JSON.stringify(vehicles));
-          detailVehicles.innerHTML += createDetailButton(data.url, "vehicles", data.name);
+          detailVehicles.innerHTML += `
+            <button data-type="detailBtn" data-url="${data.url}" data-source="vehicles" class="item-extend-description">${data.name}</button>
+          `;
           populateAllContent('vehicles');
           setDetailButtons();
           hideSpinner();

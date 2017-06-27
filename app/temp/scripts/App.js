@@ -76,7 +76,7 @@
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 // use /swapi for baseUrl when building to production...
-var baseUrl = "/swapi";
+var baseUrl = "";
 var router = [{ path: "/", name: "" }, { path: "/", name: "films" }, { path: "/", name: "people" }, { path: "/", name: "species" }, { path: "/", name: "planets" }, { path: "/", name: "starships" }, { path: "/", name: "vehicles" }];
 var swapiSource = router.slice(1);
 var menus = Array.from(document.querySelectorAll('.route'));
@@ -95,8 +95,7 @@ var spinner = document.querySelector('.spinner');
 var nextPages = JSON.parse(sessionStorage.getItem('nextPages')) || {};
 var myInit = {
   method: 'GET',
-  mode: 'cors',
-  cache: 'default'
+  mode: 'cors'
 };
 
 var showSpinner = function showSpinner() {
