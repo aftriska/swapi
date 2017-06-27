@@ -1,4 +1,3 @@
-let isFetching = false;
 // use /swapi for baseUrl when building to production...
 const baseUrl = "/swapi";
 const router = [
@@ -25,6 +24,11 @@ const homeBtn = document.querySelector('[name=route]');
 const modalClose = document.querySelector('.modal__close');
 const spinner = document.querySelector('.spinner');
 const nextPages = JSON.parse(sessionStorage.getItem('nextPages')) || {};
+const myInit = {
+  method: 'GET',
+  mode: 'cors',
+  cache: 'default'
+};
 
 const showSpinner = () => {
   spinner.classList.add('spinner--is-visible');
@@ -307,7 +311,7 @@ const initialLoad = () => {
 
     if(localData.length === 0) {
       showSpinner();
-      fetch(urlToFetch)
+      fetch(urlToFetch, myInit)
       .then(blob => blob.json())
       .then(data => {
         nextPages[`${s.name}`] = data.next;
@@ -381,7 +385,7 @@ const fetchNextPage = (toFetch) => {
 
   if(nextPage !== null){
     showSpinner();
-    fetch(nextPage)
+    fetch(nextPage, myInit)
     .then(blob => blob.json())
     .then(data => {
       nextPages[`${toFetch}`] = data.next;
@@ -521,7 +525,7 @@ const populateDetail = (itemToShow, pageType) => {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(f)
+        fetch(f, myInit)
         .then(blob => blob.json())
         .then(data => {
           films.push(data);
@@ -554,7 +558,7 @@ const populateDetail = (itemToShow, pageType) => {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(c)
+        fetch(c, myInit)
         .then(blob => blob.json())
         .then(data => {
           people.push(data);
@@ -587,7 +591,7 @@ const populateDetail = (itemToShow, pageType) => {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(s)
+        fetch(s, myInit)
         .then(blob => blob.json())
         .then(data => {
           species.push(data);
@@ -620,7 +624,7 @@ const populateDetail = (itemToShow, pageType) => {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(p)
+        fetch(p, myInit)
         .then(blob => blob.json())
         .then(data => {
           planets.push(data);
@@ -653,7 +657,7 @@ const populateDetail = (itemToShow, pageType) => {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(s)
+        fetch(s, myInit)
         .then(blob => blob.json())
         .then(data => {
           starships.push(data);
@@ -686,7 +690,7 @@ const populateDetail = (itemToShow, pageType) => {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(v)
+        fetch(v, myInit)
         .then(blob => blob.json())
         .then(data => {
           vehicles.push(data);

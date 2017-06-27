@@ -75,7 +75,6 @@
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var isFetching = false;
 // use /swapi for baseUrl when building to production...
 var baseUrl = "/swapi";
 var router = [{ path: "/", name: "" }, { path: "/", name: "films" }, { path: "/", name: "people" }, { path: "/", name: "species" }, { path: "/", name: "planets" }, { path: "/", name: "starships" }, { path: "/", name: "vehicles" }];
@@ -94,6 +93,11 @@ var homeBtn = document.querySelector('[name=route]');
 var modalClose = document.querySelector('.modal__close');
 var spinner = document.querySelector('.spinner');
 var nextPages = JSON.parse(sessionStorage.getItem('nextPages')) || {};
+var myInit = {
+  method: 'GET',
+  mode: 'cors',
+  cache: 'default'
+};
 
 var showSpinner = function showSpinner() {
   spinner.classList.add('spinner--is-visible');
@@ -270,7 +274,7 @@ var initialLoad = function initialLoad() {
 
     if (localData.length === 0) {
       showSpinner();
-      fetch(urlToFetch).then(function (blob) {
+      fetch(urlToFetch, myInit).then(function (blob) {
         return blob.json();
       }).then(function (data) {
         nextPages["" + s.name] = data.next;
@@ -343,7 +347,7 @@ var fetchNextPage = function fetchNextPage(toFetch) {
 
   if (nextPage !== null) {
     showSpinner();
-    fetch(nextPage).then(function (blob) {
+    fetch(nextPage, myInit).then(function (blob) {
       return blob.json();
     }).then(function (data) {
       nextPages["" + toFetch] = data.next;
@@ -488,7 +492,7 @@ var populateDetail = function populateDetail(itemToShow, pageType) {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(f).then(function (blob) {
+        fetch(f, myInit).then(function (blob) {
           return blob.json();
         }).then(function (data) {
           films.push(data);
@@ -518,7 +522,7 @@ var populateDetail = function populateDetail(itemToShow, pageType) {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(c).then(function (blob) {
+        fetch(c, myInit).then(function (blob) {
           return blob.json();
         }).then(function (data) {
           people.push(data);
@@ -548,7 +552,7 @@ var populateDetail = function populateDetail(itemToShow, pageType) {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(s).then(function (blob) {
+        fetch(s, myInit).then(function (blob) {
           return blob.json();
         }).then(function (data) {
           species.push(data);
@@ -578,7 +582,7 @@ var populateDetail = function populateDetail(itemToShow, pageType) {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(p).then(function (blob) {
+        fetch(p, myInit).then(function (blob) {
           return blob.json();
         }).then(function (data) {
           planets.push(data);
@@ -608,7 +612,7 @@ var populateDetail = function populateDetail(itemToShow, pageType) {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(s).then(function (blob) {
+        fetch(s, myInit).then(function (blob) {
           return blob.json();
         }).then(function (data) {
           starships.push(data);
@@ -638,7 +642,7 @@ var populateDetail = function populateDetail(itemToShow, pageType) {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(v).then(function (blob) {
+        fetch(v, myInit).then(function (blob) {
           return blob.json();
         }).then(function (data) {
           vehicles.push(data);
