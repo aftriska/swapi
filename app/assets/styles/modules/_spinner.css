@@ -1,6 +1,6 @@
 .spinner{
   background-color: rgba(#000, .7);
-  z-index: 5;
+  z-index: 10;
   position: absolute;
   width: 100vw;
   height: 100vh;
