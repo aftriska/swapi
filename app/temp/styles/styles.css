@@ -712,18 +712,6 @@ a {
 
 .row {
 
-  display: -webkit-box;
-
-  display: -ms-flexbox;
-
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-flow: row wrap;
-          flex-flow: row wrap;
-  -webkit-box-pack: start;
-      -ms-flex-pack: start;
-          justify-content: flex-start;
   margin-top: 20px;
 }
 
@@ -739,24 +727,94 @@ a {
     display: flex;
   }
 
-.row__large-3 {
-    float: left;
-    width: 25%;
+@media (min-width: 800px) {
+
+.row {
+
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: row wrap;
+            flex-flow: row wrap;
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: flex-start
+}
+
+    .row > div {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+    }
+
+    .row__medium-3 {
+      float: left;
+      width: 25%;
+    }
+
+    .row__medium-4 {
+      float: left;
+      width: 33.33%;
+    }
+
+    .row__medium-6 {
+      float: left;
+      width: 50%;
+    }
+
+    .row__medium-12 {
+      float: left;
+      width: 100%;
+    }
   }
 
-.row__large-4 {
-    float: left;
-    width: 33.33%;
-  }
+@media (min-width: 1010px) {
 
-.row__large-6 {
-    float: left;
-    width: 50%;
-  }
+.row {
 
-.row__large-12 {
-    float: left;
-    width: 100%;
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: row wrap;
+            flex-flow: row wrap;
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: flex-start
+}
+
+    .row > div {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+    }
+
+    .row__large-3 {
+      float: left;
+      width: 25%;
+    }
+
+    .row__large-4 {
+      float: left;
+      width: 33.33%;
+    }
+
+    .row__large-6 {
+      float: left;
+      width: 50%;
+    }
+
+    .row__large-12 {
+      float: left;
+      width: 100%;
+    }
   }
 
 .item-top-title {

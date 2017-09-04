@@ -1,32 +1,71 @@
 .row {
   @mixin clearfix;
 
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
   margin-top: 20px;
 
   & > div {
     display: flex;
   }
 
-  &__large-3 {
-    float: left;
-    width: 25%;
+  @mixin atMedium {
+
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+
+    & > div {
+      display: flex;
+    }
+
+    &__medium-3 {
+      float: left;
+      width: 25%;
+    }
+
+    &__medium-4 {
+      float: left;
+      width: 33.33%;
+    }
+
+    &__medium-6 {
+      float: left;
+      width: 50%;
+    }
+
+    &__medium-12 {
+      float: left;
+      width: 100%;
+    }
   }
 
-  &__large-4 {
-    float: left;
-    width: 33.33%;
-  }
+  @mixin atLarge {
 
-  &__large-6 {
-    float: left;
-    width: 50%;
-  }
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
 
-  &__large-12 {
-    float: left;
-    width: 100%;
+    & > div {
+      display: flex;
+    }
+
+    &__large-3 {
+      float: left;
+      width: 25%;
+    }
+
+    &__large-4 {
+      float: left;
+      width: 33.33%;
+    }
+
+    &__large-6 {
+      float: left;
+      width: 50%;
+    }
+
+    &__large-12 {
+      float: left;
+      width: 100%;
+    }
   }
 }

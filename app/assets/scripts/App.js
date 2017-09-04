@@ -1,5 +1,5 @@
 // use /swapi for baseUrl when building to production...
-const baseUrl = "";
+const baseUrl = "/swapi";
 const router = [
   { path: "/", name: ""},
   { path: "/", name: "films"},
@@ -37,6 +37,12 @@ const numberWithCommas = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
+const createDetailButton = (dataUrl, dataSource, buttonContent) => {
+  return `
+    <button data-type="detailBtn" data-url="${dataUrl}" data-source="${dataSource}" class="item-extend-description">${buttonContent}</button>
+  `;
+}
+
 const filmsIntro = (item) => {
   const releaseDate= new Date(item.release_date);
   const newDate = releaseDate.toDateString();
@@ -44,12 +50,6 @@ const filmsIntro = (item) => {
     <p><h4 class="item-top-title">EPISODE ${item.episode_id}</h4></p>
     <p><h3 class="item-title">${item.title}</h3></p>
     <p><span class="subtitle-yellow">Director:</span> ${item.director} <span class="subtitle-yellow">Producer:</span> ${item.producer} <span class="subtitle-yellow">Release Date:</span> ${newDate}</p>
-  `;
-}
-
-const createDetailButton = (dataUrl, dataSource, buttonContent) => {
-  return `
-    <button data-type="detailBtn" data-url="${dataUrl}" data-source="${dataSource}" class="item-extend-description">${buttonContent}</button>
   `;
 }
 
@@ -63,7 +63,7 @@ const populateFilms = (data) => {
     const detailButton = createDetailButton(d.url, "films", "More Details...");
     const shortDesc = d.opening_crawl.substr(0,199);
     return `
-    <div class="row__large-6">
+    <div class="row__medium-6">
       <div class="page-section__item">
         ${intro}
         <p><span class="item-description">${shortDesc}...</p>
@@ -95,7 +95,7 @@ const populatePeople = (data) => {
     const intro = peopleIntro(d);
     const detailButton = createDetailButton(d.url, "people", "More Details...");
     return `
-    <div class="row__large-4">
+    <div class="row__medium-4">
       <div class="page-section__item">
         <p><em>${i+1}</em></p>
         ${intro}
@@ -129,7 +129,7 @@ const populateSpecies = (data) => {
     const intro = speciesIntro(d);
     const detailButton = createDetailButton(d.url, "species", "More Details...");
     return `
-    <div class="row__large-4">
+    <div class="row__medium-4">
       <div class="page-section__item">
         <p><em>${i+1}</em></p>
         ${intro}
@@ -163,7 +163,7 @@ const populatePlanets = (data) => {
     const intro = planetsIntro(d);
     const detailButton = createDetailButton(d.url, "planets", "More Details...");
     return `
-    <div class="row__large-4">
+    <div class="row__medium-4">
       <div class="page-section__item">
         <p><em>${i+1}</em></p>
         ${intro}
@@ -201,7 +201,7 @@ const populateStarships = (data) => {
     const intro = starshipsIntro(d);
     const detailButton = createDetailButton(d.url, "starships", "More Details...");
     return `
-    <div class="row__large-4">
+    <div class="row__medium-4">
       <div class="page-section__item">
         <p><em>${i+1}</em></p>
         ${intro}
@@ -237,7 +237,7 @@ const populateVehicles = (data) => {
     const intro = vehiclesIntro(d);
     const detailButton = createDetailButton(d.url, "vehicles", "More Details...");
     return `
-    <div class="row__large-4">
+    <div class="row__medium-4">
       <div class="page-section__item">
         <p><em>${i+1}</em></p>
         ${intro}
@@ -247,30 +247,6 @@ const populateVehicles = (data) => {
     `;
   }).join('');
 }
-
-const populateAllContent = (pageToLoad) => {
-  const localData = JSON.parse(sessionStorage.getItem(`${pageToLoad}`));
-  switch(pageToLoad) {
-    case 'films':
-      populateFilms(localData);
-      break;
-    case 'people':
-      populatePeople(localData);
-      break;
-    case 'species':
-      populateSpecies(localData);
-      break;
-    case 'planets':
-      populatePlanets(localData);
-      break;
-    case 'starships':
-      populateStarships(localData);
-      break;
-    case 'vehicles':
-      populateVehicles(localData);
-      break;
-  }
-};
 
 const clearLargeNav = () => {
   homeBtn.classList.remove('larger');
@@ -296,34 +272,6 @@ const hideAllPages = () => {
 const showPage = (page) => {
   const pageToOpen = pages.find(p => { return p.id === page });
   pageToOpen.classList.add('page-section--is-visible');
-}
-
-const initialLoad = () => {
-  hideModal();
-  swapiSource.forEach(s => {
-    const urlToFetch = `http://swapi.co/api/${s.name}/`;
-    const localData = JSON.parse(sessionStorage.getItem(`${s.name}`)) || [];
-
-    if(localData.length === 0) {
-      showSpinner();
-      fetch(urlToFetch)
-      .then(blob => blob.json())
-      .then(data => {
-        nextPages[`${s.name}`] = data.next;
-        localData.push(...data.results);
-        sessionStorage.setItem('nextPages', JSON.stringify(nextPages));
-        sessionStorage.setItem(`${s.name}`, JSON.stringify(localData));
-        populateAllContent(s.name);
-        setDetailButtons();
-        hideSpinner();
-      })
-      .catch(function(error) {
-        console.log('There has been a problem with your fetch operation: ' + error.message);
-      });
-    } else {
-      populateAllContent(s.name);
-    }
-  });
 }
 
 const loadPage = () => {
@@ -487,6 +435,7 @@ const populateDetail = (itemToShow, pageType) => {
       peopleLength = item.pilots.length;
       peopleList = item.pilots;
       detailOpening.innerHTML = vehiclesIntro(item);
+      // console.log(item);
       break;
   }
 
@@ -666,10 +615,7 @@ const populateDetail = (itemToShow, pageType) => {
       });
 
       if(vehiclesDetail) {
-        detailVehicles.innerHTML += createDetailButton(starshipsDetail.url, "starships", starshipsDetail.name);
-        detailVehicles.innerHTML += `
-          <button data-type="detailBtn" data-url="${vehiclesDetail.url}" data-source="vehicles" class="item-extend-description">${vehiclesDetail.name}</button>
-        `;
+        detailVehicles.innerHTML += createDetailButton(vehiclesDetail.url, "vehicles", vehiclesDetail.name);
         setDetailButtons();
       } else {
         showSpinner();
@@ -678,9 +624,7 @@ const populateDetail = (itemToShow, pageType) => {
         .then(data => {
           vehicles.push(data);
           sessionStorage.setItem(`vehicles`, JSON.stringify(vehicles));
-          detailVehicles.innerHTML += `
-            <button data-type="detailBtn" data-url="${data.url}" data-source="vehicles" class="item-extend-description">${data.name}</button>
-          `;
+          detailVehicles.innerHTML += createDetailButton(data.url, "vehicles", data.name);
           populateAllContent('vehicles');
           setDetailButtons();
           hideSpinner();
@@ -694,12 +638,12 @@ const populateDetail = (itemToShow, pageType) => {
   }
 }
 
-const showModal = () => {
-  modal.classList.add('modal--is-visible');
-}
-
 const hideModal = () => {
   modal.classList.remove('modal--is-visible');
+}
+
+const showModal = () => {
+  modal.classList.add('modal--is-visible');
 }
 
 const keyPressHandler = (e) => {
@@ -717,6 +661,58 @@ const setDetailButtons = () => {
   const detailButtons = Array.from(document.querySelectorAll('[data-type=detailBtn]'));
   detailButtons.forEach(b => {
     b.addEventListener('click', showDetail);
+  });
+}
+
+const populateAllContent = (pageToLoad) => {
+  const localData = JSON.parse(sessionStorage.getItem(`${pageToLoad}`));
+  switch(pageToLoad) {
+    case 'films':
+      populateFilms(localData);
+      break;
+    case 'people':
+      populatePeople(localData);
+      break;
+    case 'species':
+      populateSpecies(localData);
+      break;
+    case 'planets':
+      populatePlanets(localData);
+      break;
+    case 'starships':
+      populateStarships(localData);
+      break;
+    case 'vehicles':
+      populateVehicles(localData);
+      break;
+  }
+};
+
+const initialLoad = () => {
+  hideModal();
+  swapiSource.forEach(s => {
+    const urlToFetch = `https://swapi.co/api/${s.name}/`;
+    const localData = JSON.parse(sessionStorage.getItem(`${s.name}`)) || [];
+
+    if(localData.length === 0) {
+      showSpinner();
+      fetch(urlToFetch)
+      .then(blob => blob.json())
+      .then(data => {
+        nextPages[`${s.name}`] = data.next;
+        localData.push(...data.results);
+        sessionStorage.setItem('nextPages', JSON.stringify(nextPages));
+        sessionStorage.setItem(`${s.name}`, JSON.stringify(localData));
+        populateAllContent(s.name);
+        setDetailButtons();
+        hideSpinner();
+      })
+      .catch(function(error) {
+        console.log('There has been a problem with your fetch operation: ' + error.message);
+      });
+    } else {
+      populateAllContent(s.name);
+    }
   });
 }
 

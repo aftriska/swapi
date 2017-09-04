@@ -76,7 +76,7 @@
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 // use /swapi for baseUrl when building to production...
-var baseUrl = "";
+var baseUrl = "/swapi";
 var router = [{ path: "/", name: "" }, { path: "/", name: "films" }, { path: "/", name: "people" }, { path: "/", name: "species" }, { path: "/", name: "planets" }, { path: "/", name: "starships" }, { path: "/", name: "vehicles" }];
 var swapiSource = router.slice(1);
 var menus = Array.from(document.querySelectorAll('.route'));
@@ -93,10 +93,6 @@ var homeBtn = document.querySelector('[name=route]');
 var modalClose = document.querySelector('.modal__close');
 var spinner = document.querySelector('.spinner');
 var nextPages = JSON.parse(sessionStorage.getItem('nextPages')) || {};
-var myInit = {
-  method: 'GET',
-  mode: 'cors'
-};
 
 var showSpinner = function showSpinner() {
   spinner.classList.add('spinner--is-visible');
@@ -110,14 +106,14 @@ var numberWithCommas = function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
+var createDetailButton = function createDetailButton(dataUrl, dataSource, buttonContent) {
+  return "\n    <button data-type=\"detailBtn\" data-url=\"" + dataUrl + "\" data-source=\"" + dataSource + "\" class=\"item-extend-description\">" + buttonContent + "</button>\n  ";
+};
+
 var filmsIntro = function filmsIntro(item) {
   var releaseDate = new Date(item.release_date);
   var newDate = releaseDate.toDateString();
   return "\n    <p><h4 class=\"item-top-title\">EPISODE " + item.episode_id + "</h4></p>\n    <p><h3 class=\"item-title\">" + item.title + "</h3></p>\n    <p><span class=\"subtitle-yellow\">Director:</span> " + item.director + " <span class=\"subtitle-yellow\">Producer:</span> " + item.producer + " <span class=\"subtitle-yellow\">Release Date:</span> " + newDate + "</p>\n  ";
-};
-
-var createDetailButton = function createDetailButton(dataUrl, dataSource, buttonContent) {
-  return "\n    <button data-type=\"detailBtn\" data-url=\"" + dataUrl + "\" data-source=\"" + dataSource + "\" class=\"item-extend-description\">" + buttonContent + "</button>\n  ";
 };
 
 var populateFilms = function populateFilms(data) {
@@ -131,7 +127,7 @@ var populateFilms = function populateFilms(data) {
     var intro = filmsIntro(d);
     var detailButton = createDetailButton(d.url, "films", "More Details...");
     var shortDesc = d.opening_crawl.substr(0, 199);
-    return "\n    <div class=\"row__large-6\">\n      <div class=\"page-section__item\">\n        " + intro + "\n        <p><span class=\"item-description\">" + shortDesc + "...</p>\n        <p>" + detailButton + "</p>\n      </div>\n    </div>\n    ";
+    return "\n    <div class=\"row__medium-6\">\n      <div class=\"page-section__item\">\n        " + intro + "\n        <p><span class=\"item-description\">" + shortDesc + "...</p>\n        <p>" + detailButton + "</p>\n      </div>\n    </div>\n    ";
   }).join('');
 };
 
@@ -145,7 +141,7 @@ var populatePeople = function populatePeople(data) {
   toInsert.innerHTML = data.map(function (d, i) {
     var intro = peopleIntro(d);
     var detailButton = createDetailButton(d.url, "people", "More Details...");
-    return "\n    <div class=\"row__large-4\">\n      <div class=\"page-section__item\">\n        <p><em>" + (i + 1) + "</em></p>\n        " + intro + "\n        <p>" + detailButton + "</p>\n      </div>\n    </div>\n    ";
+    return "\n    <div class=\"row__medium-4\">\n      <div class=\"page-section__item\">\n        <p><em>" + (i + 1) + "</em></p>\n        " + intro + "\n        <p>" + detailButton + "</p>\n      </div>\n    </div>\n    ";
   }).join('');
 };
 
@@ -159,7 +155,7 @@ var populateSpecies = function populateSpecies(data) {
   toInsert.innerHTML = data.map(function (d, i) {
     var intro = speciesIntro(d);
     var detailButton = createDetailButton(d.url, "species", "More Details...");
-    return "\n    <div class=\"row__large-4\">\n      <div class=\"page-section__item\">\n        <p><em>" + (i + 1) + "</em></p>\n        " + intro + "\n        <p>" + detailButton + "</p>\n      </div>\n    </div>\n    ";
+    return "\n    <div class=\"row__medium-4\">\n      <div class=\"page-section__item\">\n        <p><em>" + (i + 1) + "</em></p>\n        " + intro + "\n        <p>" + detailButton + "</p>\n      </div>\n    </div>\n    ";
   }).join('');
 };
 
@@ -173,7 +169,7 @@ var populatePlanets = function populatePlanets(data) {
   toInsert.innerHTML = data.map(function (d, i) {
     var intro = planetsIntro(d);
     var detailButton = createDetailButton(d.url, "planets", "More Details...");
-    return "\n    <div class=\"row__large-4\">\n      <div class=\"page-section__item\">\n        <p><em>" + (i + 1) + "</em></p>\n        " + intro + "\n        <p>" + detailButton + "</p>\n      </div>\n    </div>\n    ";
+    return "\n    <div class=\"row__medium-4\">\n      <div class=\"page-section__item\">\n        <p><em>" + (i + 1) + "</em></p>\n        " + intro + "\n        <p>" + detailButton + "</p>\n      </div>\n    </div>\n    ";
   }).join('');
 };
 
@@ -187,7 +183,7 @@ var populateStarships = function populateStarships(data) {
   toInsert.innerHTML = data.map(function (d, i) {
     var intro = starshipsIntro(d);
     var detailButton = createDetailButton(d.url, "starships", "More Details...");
-    return "\n    <div class=\"row__large-4\">\n      <div class=\"page-section__item\">\n        <p><em>" + (i + 1) + "</em></p>\n        " + intro + "\n        <p>" + detailButton + "</p>\n      </div>\n    </div>\n    ";
+    return "\n    <div class=\"row__medium-4\">\n      <div class=\"page-section__item\">\n        <p><em>" + (i + 1) + "</em></p>\n        " + intro + "\n        <p>" + detailButton + "</p>\n      </div>\n    </div>\n    ";
   }).join('');
 };
 
@@ -201,32 +197,8 @@ var populateVehicles = function populateVehicles(data) {
   toInsert.innerHTML = data.map(function (d, i) {
     var intro = vehiclesIntro(d);
     var detailButton = createDetailButton(d.url, "vehicles", "More Details...");
-    return "\n    <div class=\"row__large-4\">\n      <div class=\"page-section__item\">\n        <p><em>" + (i + 1) + "</em></p>\n        " + intro + "\n        <p>" + detailButton + "</p>\n      </div>\n    </div>\n    ";
+    return "\n    <div class=\"row__medium-4\">\n      <div class=\"page-section__item\">\n        <p><em>" + (i + 1) + "</em></p>\n        " + intro + "\n        <p>" + detailButton + "</p>\n      </div>\n    </div>\n    ";
   }).join('');
-};
-
-var populateAllContent = function populateAllContent(pageToLoad) {
-  var localData = JSON.parse(sessionStorage.getItem("" + pageToLoad));
-  switch (pageToLoad) {
-    case 'films':
-      populateFilms(localData);
-      break;
-    case 'people':
-      populatePeople(localData);
-      break;
-    case 'species':
-      populateSpecies(localData);
-      break;
-    case 'planets':
-      populatePlanets(localData);
-      break;
-    case 'starships':
-      populateStarships(localData);
-      break;
-    case 'vehicles':
-      populateVehicles(localData);
-      break;
-  }
 };
 
 var clearLargeNav = function clearLargeNav() {
@@ -265,33 +237,6 @@ var showPage = function showPage(page) {
   pageToOpen.classList.add('page-section--is-visible');
 };
 
-var initialLoad = function initialLoad() {
-  hideModal();
-  swapiSource.forEach(function (s) {
-    var urlToFetch = "http://swapi.co/api/" + s.name + "/";
-    var localData = JSON.parse(sessionStorage.getItem("" + s.name)) || [];
-
-    if (localData.length === 0) {
-      showSpinner();
-      fetch(urlToFetch, myInit).then(function (blob) {
-        return blob.json();
-      }).then(function (data) {
-        nextPages["" + s.name] = data.next;
-        localData.push.apply(localData, _toConsumableArray(data.results));
-        sessionStorage.setItem('nextPages', JSON.stringify(nextPages));
-        sessionStorage.setItem("" + s.name, JSON.stringify(localData));
-        populateAllContent(s.name);
-        setDetailButtons();
-        hideSpinner();
-      }).catch(function (error) {
-        console.log('There has been a problem with your fetch operation: ' + error.message);
-      });
-    } else {
-      populateAllContent(s.name);
-    }
-  });
-};
-
 var loadPage = function loadPage() {
   hideModal();
   setDetailButtons();
@@ -325,28 +270,13 @@ var loadPage = function loadPage() {
   }
 };
 
-// const debounce = (func, wait = 5, immediate = true) => {
-//   var timeout;
-//   return function() {
-//     var context = this, args = arguments;
-//     var later = function() {
-//       timeout = null;
-//       if (!immediate) func.apply(context, args);
-//     };
-//     var callNow = immediate && !timeout;
-//     clearTimeout(timeout);
-//     timeout = setTimeout(later, wait);
-//     if (callNow) func.apply(context, args);
-//   };
-// };
-
 var fetchNextPage = function fetchNextPage(toFetch) {
   var nextPage = nextPages["" + toFetch];
   var localData = JSON.parse(sessionStorage.getItem("" + toFetch));
 
   if (nextPage !== null) {
     showSpinner();
-    fetch(nextPage, myInit).then(function (blob) {
+    fetch(nextPage).then(function (blob) {
       return blob.json();
     }).then(function (data) {
       nextPages["" + toFetch] = data.next;
@@ -475,6 +405,7 @@ var populateDetail = function populateDetail(itemToShow, pageType) {
       peopleLength = item.pilots.length;
       peopleList = item.pilots;
       detailOpening.innerHTML = vehiclesIntro(item);
+      // console.log(item);
       break;
   }
 
@@ -491,7 +422,7 @@ var populateDetail = function populateDetail(itemToShow, pageType) {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(f, myInit).then(function (blob) {
+        fetch(f).then(function (blob) {
           return blob.json();
         }).then(function (data) {
           films.push(data);
@@ -521,7 +452,7 @@ var populateDetail = function populateDetail(itemToShow, pageType) {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(c, myInit).then(function (blob) {
+        fetch(c).then(function (blob) {
           return blob.json();
         }).then(function (data) {
           people.push(data);
@@ -551,7 +482,7 @@ var populateDetail = function populateDetail(itemToShow, pageType) {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(s, myInit).then(function (blob) {
+        fetch(s).then(function (blob) {
           return blob.json();
         }).then(function (data) {
           species.push(data);
@@ -581,7 +512,7 @@ var populateDetail = function populateDetail(itemToShow, pageType) {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(p, myInit).then(function (blob) {
+        fetch(p).then(function (blob) {
           return blob.json();
         }).then(function (data) {
           planets.push(data);
@@ -611,7 +542,7 @@ var populateDetail = function populateDetail(itemToShow, pageType) {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(s, myInit).then(function (blob) {
+        fetch(s).then(function (blob) {
           return blob.json();
         }).then(function (data) {
           starships.push(data);
@@ -641,7 +572,7 @@ var populateDetail = function populateDetail(itemToShow, pageType) {
         setDetailButtons();
       } else {
         showSpinner();
-        fetch(v, myInit).then(function (blob) {
+        fetch(v).then(function (blob) {
           return blob.json();
         }).then(function (data) {
           vehicles.push(data);
@@ -659,12 +590,12 @@ var populateDetail = function populateDetail(itemToShow, pageType) {
   }
 };
 
-var showModal = function showModal() {
-  modal.classList.add('modal--is-visible');
-};
-
 var hideModal = function hideModal() {
   modal.classList.remove('modal--is-visible');
+};
+
+var showModal = function showModal() {
+  modal.classList.add('modal--is-visible');
 };
 
 var keyPressHandler = function keyPressHandler(e) {
@@ -682,6 +613,57 @@ var setDetailButtons = function setDetailButtons() {
   var detailButtons = Array.from(document.querySelectorAll('[data-type=detailBtn]'));
   detailButtons.forEach(function (b) {
     b.addEventListener('click', showDetail);
+  });
+};
+
+var populateAllContent = function populateAllContent(pageToLoad) {
+  var localData = JSON.parse(sessionStorage.getItem("" + pageToLoad));
+  switch (pageToLoad) {
+    case 'films':
+      populateFilms(localData);
+      break;
+    case 'people':
+      populatePeople(localData);
+      break;
+    case 'species':
+      populateSpecies(localData);
+      break;
+    case 'planets':
+      populatePlanets(localData);
+      break;
+    case 'starships':
+      populateStarships(localData);
+      break;
+    case 'vehicles':
+      populateVehicles(localData);
+      break;
+  }
+};
+
+var initialLoad = function initialLoad() {
+  hideModal();
+  swapiSource.forEach(function (s) {
+    var urlToFetch = "https://swapi.co/api/" + s.name + "/";
+    var localData = JSON.parse(sessionStorage.getItem("" + s.name)) || [];
+
+    if (localData.length === 0) {
+      showSpinner();
+      fetch(urlToFetch).then(function (blob) {
+        return blob.json();
+      }).then(function (data) {
+        nextPages["" + s.name] = data.next;
+        localData.push.apply(localData, _toConsumableArray(data.results));
+        sessionStorage.setItem('nextPages', JSON.stringify(nextPages));
+        sessionStorage.setItem("" + s.name, JSON.stringify(localData));
+        populateAllContent(s.name);
+        setDetailButtons();
+        hideSpinner();
+      }).catch(function (error) {
+        console.log('There has been a problem with your fetch operation: ' + error.message);
+      });
+    } else {
+      populateAllContent(s.name);
+    }
   });
 };
 
