@@ -1,5 +1,5 @@
 // use /swapi for baseUrl when building to production...
-const baseUrl = "/swapi";
+const baseUrl = "";
 const router = [
   { path: "/", name: ""},
   { path: "/", name: "films"},
